@@ -1,0 +1,44 @@
+[
+  {
+    "id": "step-1",
+    "action": "navigate",
+    "target": "https://demo.guru99.com/V4/",
+    "metadata": {
+      "originalEnglish": "Navigate to https://demo.guru99.com/V4/"
+    }
+  },
+  {
+    "id": "step-1a",
+    "action": "waitFor",
+    "target": "page load",
+    "metadata": {
+      "originalEnglish": "Wait for page to load"
+    }
+  },
+  {
+    "id": "step-2",
+    "action": "fill",
+    "target": "username_field",
+    "value": "XYZ",
+    "metadata": {
+      "originalEnglish": "Enter \"XYZ\" in user Id field"
+    }
+  },
+  {
+    "id": "step-3",
+    "action": "fill",
+    "target": "password_field",
+    "value": "password",
+    "metadata": {
+      "originalEnglish": "Enter \"password\" in password field"
+    }
+  },
+  {
+    "id": "step-4",
+    "action": "click",
+    "target": "login_button",
+    "metadata": {
+      "originalEnglish": "click on login button"
+    }
+  }
+]

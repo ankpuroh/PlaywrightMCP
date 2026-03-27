@@ -1,0 +1,50 @@
+[
+  {
+    "id": "step-1",
+    "action": "navigate",
+    "target": "https://the-internet.herokuapp.com/",
+    "metadata": { "originalEnglish": "navigate to https://the-internet.herokuapp.com/" }
+  },
+  {
+    "id": "step-1a",
+    "action": "waitFor",
+    "target": "page load",
+    "metadata": { "originalEnglish": "Wait 2 seconds for page to load" }
+  },
+  {
+    "id": "step-2",
+    "action": "click",
+    "target": "checkboxes_link",
+    "metadata": { "originalEnglish": "click on link Checkboxes" }
+  },
+  {
+    "id": "step-2a",
+    "action": "waitFor",
+    "target": "navigation completion",
+    "metadata": { "originalEnglish": "Wait 2 seconds after clicking checkboxes link" }
+  },
+  {
+    "id": "step-3",
+    "action": "click",
+    "target": "checkbox1",
+    "metadata": { "originalEnglish": "check checkbox1" }
+  },
+  {
+    "id": "step-3a",
+    "action": "waitFor",
+    "target": "checkbox interaction",
+    "metadata": { "originalEnglish": "Wait 2 seconds after checking checkbox1" }
+  },
+  {
+    "id": "step-4",
+    "action": "click",
+    "target": "checkbox2",
+    "metadata": { "originalEnglish": "uncheck checkbox2" }
+  },
+  {
+    "id": "step-4a",
+    "action": "waitFor",
+    "target": "checkbox interaction",
+    "metadata": { "originalEnglish": "Wait 2 seconds after unchecking checkbox2" }
+  }
+]

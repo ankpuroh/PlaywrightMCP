@@ -1,0 +1,132 @@
+[
+  {
+    "id": "workflow-1",
+    "action": "navigate",
+    "target": "https://example.com/products",
+    "metadata": {
+      "originalEnglish": "Navigate to products page"
+    }
+  },
+  {
+    "id": "workflow-2",
+    "action": "screenshot",
+    "target": "products-initial",
+    "metadata": {
+      "originalEnglish": "Screenshot initial products page"
+    }
+  },
+  {
+    "id": "workflow-3",
+    "action": "click",
+    "target": "searchButton",
+    "metadata": {
+      "originalEnglish": "Click search button"
+    }
+  },
+  {
+    "id": "workflow-4",
+    "action": "fill",
+    "target": "searchInput",
+    "value": "automation testing",
+    "metadata": {
+      "originalEnglish": "Search for automation testing products"
+    }
+  },
+  {
+    "id": "workflow-5",
+    "action": "press",
+    "value": "Enter",
+    "metadata": {
+      "originalEnglish": "Submit search query"
+    }
+  },
+  {
+    "id": "workflow-6",
+    "action": "waitFor",
+    "target": "Search results",
+    "metadata": {
+      "originalEnglish": "Wait for search results to load"
+    }
+  },
+  {
+    "id": "workflow-7",
+    "action": "assertText",
+    "assert": "Found",
+    "metadata": {
+      "originalEnglish": "Verify search found results"
+    }
+  },
+  {
+    "id": "workflow-8",
+    "action": "screenshot",
+    "target": "search-results",
+    "metadata": {
+      "originalEnglish": "Screenshot search results"
+    }
+  },
+  {
+    "id": "workflow-9",
+    "action": "click",
+    "target": "firstResultButton",
+    "value": "first-product",
+    "metadata": {
+      "originalEnglish": "Click on first product result"
+    }
+  },
+  {
+    "id": "workflow-10",
+    "action": "waitFor",
+    "target": "Product Details",
+    "metadata": {
+      "originalEnglish": "Wait for product details page to load"
+    }
+  },
+  {
+    "id": "workflow-11",
+    "action": "assertVisible",
+    "target": "addToCartButton",
+    "metadata": {
+      "originalEnglish": "Verify add to cart button is visible"
+    }
+  },
+  {
+    "id": "workflow-12",
+    "action": "screenshot",
+    "target": "product-details",
+    "metadata": {
+      "originalEnglish": "Screenshot product details page"
+    }
+  },
+  {
+    "id": "workflow-13",
+    "action": "click",
+    "target": "addToCartButton",
+    "metadata": {
+      "originalEnglish": "Click add to cart button"
+    }
+  },
+  {
+    "id": "workflow-14",
+    "action": "waitFor",
+    "target": "Added to cart",
+    "metadata": {
+      "originalEnglish": "Wait for success message"
+    }
+  },
+  {
+    "id": "workflow-15",
+    "action": "assertText",
+    "assert": "Added to cart",
+    "metadata": {
+      "originalEnglish": "Verify product was added to cart"
+    }
+  },
+  {
+    "id": "workflow-16",
+    "action": "screenshot",
+    "target": "success-message",
+    "metadata": {
+      "originalEnglish": "Screenshot success confirmation"
+    }
+  }
+]

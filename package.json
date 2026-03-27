@@ -1,0 +1,38 @@
+{
+  "name": "playwright-mcp-automation-framework",
+  "version": "1.0.0",
+  "description": "Automation framework for executing AI-generated JSON test steps via Playwright MCP",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "ts-node src/cli/index.ts",
+    "run-test": "ts-node src/cli/index.ts run-json",
+    "discover-locators": "ts-node src/cli/index.ts discover-locators",
+    "clean": "rm -rf dist",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "playwright",
+    "mcp",
+    "automation",
+    "testing"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^0.7.0",
+    "chalk": "^5.3.0",
+    "fs-extra": "^11.2.0",
+    "nanoid": "^5.0.3",
+    "playwright": "^1.58.2",
+    "yargs": "^17.7.2",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^20.10.6",
+    "@types/yargs": "^17.0.35",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}

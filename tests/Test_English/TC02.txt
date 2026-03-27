@@ -1,0 +1,10 @@
+
+Open browser and navigate to https://www.saucedemo.com/
+Fetch browser dom and identify locator for username and password and login button
+Enter "standard_user" in username text field and "secret_sauce" in password field.
+click on login button
+Fetch browser dom and identify locator for link "Sauce Labs Bike Light"
+Click on link "Sauce Labs Bike Light"
+Fetch browser dom and identify locator for Add to cart
+Click on "Add to Cart"
+click on shopping cart link on the top right corner
