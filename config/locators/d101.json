@@ -1,0 +1,24 @@
+{
+  "D1LoginPage": {
+    "usernameField": "input[name='username'], input[id*='user'], input[autocomplete='username'], [aria-label*='User']",
+    "passwordField": "input[type='password'], input[name='password'], input[autocomplete='current-password'], [aria-label*='Password']",
+    "loginButton": "button:has-text('Login'), button:has-text('Sign In'), input[type='submit'][value*='Log']"
+  },
+  "D1RoleSelectionPage": {
+    "roleOptionRadio": "input[type='radio'], [role='radio']",
+    "continueButton": "button:has-text('Continue'), input[type='submit'][value*='Continue'], input[type='button'][value*='Continue']"
+  },
+  "D1CustomerContextPage": {
+    "regionDropdown": "select[name*='region'], select[id*='region'], [aria-label*='Region']",
+    "branchDropdown": "select[name*='branch'], select[id*='branch'], [aria-label*='Branch']",
+    "continueButton": "button:has-text('Continue'), input[type='submit'][value*='Continue'], input[type='button'][value*='Continue']"
+  },
+  "D1CustomerSearchPage": {
+    "searchButton": "button:has-text('Search'), input[type='submit'][value*='Search'], input[type='button'][value*='Search']",
+    "lastNameField": "input[name*='last'], input[id*='last'], [aria-label*='Last']"
+  },
+  "D1SearchResultsPage": {
+    "firstResultRow": "table tbody tr, [role='rowgroup'] [role='row'], [data-testid*='result-row']",
+    "loadCustomerButton": "button:has-text('Load Customer'), input[type='submit'][value*='Load Customer'], input[type='button'][value*='Load Customer']"
+  }
+}

@@ -8,18 +8,10 @@
     }
   },
   {
-    "id": "step-1a",
-    "action": "waitFor",
-    "target": "page load",
-    "metadata": {
-      "originalEnglish": "Wait for page to load"
-    }
-  },
-  {
     "id": "step-2",
     "action": "fill",
-    "target": "username_field",
-    "value": "XYZ",
+    "target": "Guru99LoginPage.userIdField",
+    "value": "{{guru99UserId}}",
     "metadata": {
       "originalEnglish": "Enter \"XYZ\" in user Id field"
     }
@@ -27,8 +19,8 @@
   {
     "id": "step-3",
     "action": "fill",
-    "target": "password_field",
-    "value": "password",
+    "target": "Guru99LoginPage.passwordField",
+    "value": "{{guru99Password}}",
     "metadata": {
       "originalEnglish": "Enter \"password\" in password field"
     }
@@ -36,7 +28,7 @@
   {
     "id": "step-4",
     "action": "click",
-    "target": "login_button",
+    "target": "Guru99LoginPage.loginButton",
     "metadata": {
       "originalEnglish": "click on login button"
     }

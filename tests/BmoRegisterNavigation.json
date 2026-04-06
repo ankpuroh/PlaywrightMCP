@@ -1,0 +1,32 @@
+[
+  {
+    "id": "step-1",
+    "action": "navigate",
+    "target": "{{bmoBaseUrl}}",
+    "metadata": { "originalEnglish": "From login page." }
+  },
+  {
+    "id": "step-2",
+    "action": "click",
+    "target": "BmoLoginPage.registerButton",
+    "metadata": { "originalEnglish": "Click Register link." }
+  },
+  {
+    "id": "step-3",
+    "action": "assertVisible",
+    "target": "BmoEnrollmentPage.enrollmentHeading",
+    "metadata": { "originalEnglish": "Set up your online account page opens. Enrollment heading is visible." }
+  },
+  {
+    "id": "step-4",
+    "action": "assertVisible",
+    "target": "BmoEnrollmentPage.progressIndicator",
+    "metadata": { "originalEnglish": "Progress indicator is visible." }
+  },
+  {
+    "id": "step-5",
+    "action": "assertVisible",
+    "target": "BmoEnrollmentPage.enrollmentFields",
+    "metadata": { "originalEnglish": "Initial enrollment detail fields are present for first step." }
+  }
+]

@@ -1,0 +1,110 @@
+[
+  {
+    "id": "seed-01",
+    "action": "navigate",
+    "target": "{{baseUrl}}",
+    "metadata": {
+      "originalEnglish": "Open the application"
+    }
+  },
+  {
+    "id": "seed-02",
+    "action": "waitFor",
+    "target": "{{landingText}}",
+    "metadata": {
+      "originalEnglish": "Wait for landing page text"
+    }
+  },
+  {
+    "id": "seed-03",
+    "action": "fill",
+    "target": "AppLoginPage.usernameField",
+    "value": "{{username}}",
+    "metadata": {
+      "originalEnglish": "Enter username"
+    }
+  },
+  {
+    "id": "seed-04",
+    "action": "fill",
+    "target": "AppLoginPage.passwordField",
+    "value": "{{password}}",
+    "metadata": {
+      "originalEnglish": "Enter password"
+    }
+  },
+  {
+    "id": "seed-05",
+    "action": "click",
+    "target": "AppLoginPage.loginButton",
+    "metadata": {
+      "originalEnglish": "Click login"
+    }
+  },
+  {
+    "id": "seed-06",
+    "action": "waitFor",
+    "target": "{{postLoginText}}",
+    "metadata": {
+      "originalEnglish": "Wait for post-login page"
+    }
+  },
+  {
+    "id": "seed-07",
+    "action": "click",
+    "target": "HomePage.menuButton",
+    "metadata": {
+      "originalEnglish": "Open menu"
+    }
+  },
+  {
+    "id": "seed-08",
+    "action": "click",
+    "target": "HomePage.profileLink",
+    "metadata": {
+      "originalEnglish": "Open profile section"
+    }
+  },
+  {
+    "id": "seed-09",
+    "action": "waitFor",
+    "target": "{{profileText}}",
+    "metadata": {
+      "originalEnglish": "Wait for profile page"
+    }
+  },
+  {
+    "id": "seed-10",
+    "action": "fill",
+    "target": "HomePage.searchInput",
+    "value": "{{searchKeyword}}",
+    "metadata": {
+      "originalEnglish": "Type into search"
+    }
+  },
+  {
+    "id": "seed-11",
+    "action": "press",
+    "target": "HomePage.searchInput",
+    "value": "Enter",
+    "metadata": {
+      "originalEnglish": "Submit search"
+    }
+  },
+  {
+    "id": "seed-12",
+    "action": "waitFor",
+    "target": "{{resultText}}",
+    "metadata": {
+      "originalEnglish": "Wait for search results"
+    }
+  },
+  {
+    "id": "seed-13",
+    "action": "screenshot",
+    "target": "seed-exploration-end",
+    "metadata": {
+      "originalEnglish": "Capture final state"
+    }
+  }
+]

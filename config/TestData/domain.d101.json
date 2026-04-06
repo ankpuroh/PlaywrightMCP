@@ -1,0 +1,10 @@
+{
+  "defaults": {
+    "d101BaseUrl": "https://login-uat.fisglobal.com/idp/DOBMOC-BT-SIT/?ClientID=BMOC-SIT-ONE"
+  },
+  "datasets": {
+    "qa": {
+      "d101BaseUrl": "https://login-uat.fisglobal.com/idp/DOBMOC-BT-SIT/?ClientID=BMOC-SIT-ONE"
+    }
+  }
+}

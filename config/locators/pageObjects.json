@@ -1,0 +1,123 @@
+﻿{
+  "SamplePage": {
+    "searchInput": "input[name='q']",
+    "searchButton": "button[type='submit']"
+  },
+  "Guru99LoginPage": {
+    "userIdField": "input[name='uid']",
+    "passwordField": "input[name='password']",
+    "loginButton": "input[name='btnLogin']"
+  },
+  "HerokuHomePage": {
+    "checkboxesLink": "a:has-text(\"checkboxes\")"
+  },
+  "HerokuCheckboxesPage": {
+    "checkbox1": "//input[@type='checkbox'][1]",
+    "checkbox2": "//input[@type='checkbox'][2]"
+  },
+  "BmoLoginPage": {
+    "registerButton": "role=link[name='Register']",
+    "registerLink": "role=link[name='Register']",
+    "userIdField": "[aria-label='User ID'], [name='onlineId'], ion-input[name*='user']",
+    "passwordField": "input[type='password']",
+    "signInButton": "ion-button:has-text('Sign In')",
+    "signInHeading": "heading:has-text('Sign in to BMO Digital Banking')",
+    "rememberMeCheckbox": "ion-checkbox",
+    "rememberMeChecked": "ion-checkbox[checked]",
+    "rememberMeUnchecked": "ion-checkbox:not([checked])",
+    "forgotUserIdLink": "a:has-text('FORGOT USER ID?')",
+    "forgotPasswordLink": "a:has-text('FORGOT PASSWORD?')",
+    "loginNavLink": "[role='menuitem']:has-text('Login')",
+    "contactSupportNavLink": "button:has-text('Contact & support')",
+    "bmoAssistLink": "ion-button:has-text('BMO Assist')",
+    "contactUsLink": "ion-button:has-text('Contact us')",
+    "atmBranchLink": "ion-button:has-text('ATM & Branch')",
+    "showPasswordToggle": "button:has-text('Show')",
+    "passwordFieldVisible": "input[type='text']",
+    "errorBanner": "[role='alert']",
+    "userIdRequiredMsg": "text=User ID is required",
+    "passwordRequiredMsg": "text=Password is required"
+  },
+  "BmoRegisterPage": {
+    "accountTypeDropdown": "[aria-label='Account Type'], [name='accountType']",
+    "checkingOption": "role=option[name='Checking']",
+    "accountNumberField": "input[name='accountNumber'], [aria-label='Account Number']"
+  },
+  "BmoForgotUserIdPage": {
+    "pageHeading": "h1:has-text('Forgot User ID'), h2:has-text('Forgot User ID')",
+    "accountTypeSelector": "[aria-label='Account Type'], select[name*='account'], [data-testid='account-type']",
+    "accountNumberField": "[aria-label='Account Number'], input[name*='accountNumber']",
+    "ssnTinRadio": "input[type='radio'][name*='ssn'], [aria-label*='SSN']",
+    "continueButton": "button:has-text('Continue'), ion-button:has-text('Continue')",
+    "cancelButton": "a:has-text('Cancel'), button:has-text('Cancel')",
+    "verifyAnotherWayLink": "a:has-text('Verify another way')",
+    "errorBanner": "[role='alert']",
+    "accountTypeRequiredMsg": "text=Account type is required",
+    "accountNumberValidationMsg": "text=Account number is required",
+    "ssnValidationMsg": "text=SSN is required"
+  },
+  "BmoVerifyAnotherWayPage": {
+    "pageHeading": "h1:has-text('Verify'), h2:has-text('Verify another way')",
+    "emailField": "input[type='email'], [aria-label='Email'], input[name*='email']",
+    "ssnTinSection": "[aria-label*='SSN'], [name*='ssn']",
+    "backButton": "button:has-text('Back'), a:has-text('Back')",
+    "continueButton": "button:has-text('Continue'), ion-button:has-text('Continue')",
+    "errorBanner": "[role='alert']",
+    "emailValidationMsg": "text=Email is required",
+    "ssnValidationMsg": "text=SSN is required"
+  },
+  "BmoForgotPasswordPage": {
+    "pageHeading": "h1:has-text('Forgot Password'), h2:has-text('Forgot Password')",
+    "userIdField": "[aria-label='User ID'], input[name*='userId'], [name='onlineId']",
+    "ssnTinOptions": "input[type='radio'][name*='ssn'], [aria-label*='SSN']",
+    "continueButton": "button:has-text('Continue'), ion-button:has-text('Continue')",
+    "cancelButton": "a:has-text('Cancel'), button:has-text('Cancel')"
+  },
+  "BmoEnrollmentPage": {
+    "enrollmentHeading": "h1:has-text('Set up'), [data-testid='enrollment-heading']",
+    "progressIndicator": "[aria-label*='step'], [class*='progress'], [role='progressbar']",
+    "enrollmentFields": "form input:first-of-type"
+  },
+  "BmoContactSupportMenu": {
+    "menuContainer": "ul:has(li:has-text('Frequently Asked Questions')), [aria-label*='Contact']",
+    "faqOption": "a:has-text('Frequently Asked Questions'), li:has-text('Frequently Asked Questions') a",
+    "findBranchOption": "a:has-text('Find a branch'), li:has-text('Find a branch') a",
+    "callBmoOption": "a:has-text('Call BMO'), li:has-text('Call BMO') a"
+  },
+  "BmoFooterSection": {
+    "footerContainer": "footer, [role='contentinfo']",
+    "privacyLink": "a:has-text('PRIVACY')",
+    "legalLink": "a:has-text('LEGAL')",
+    "securityLink": "a:has-text('SECURITY')",
+    "memberFdicLink": "a:has-text('MEMBER FDIC')",
+    "digitalBankingAgreementLink": "a:has-text('DIGITAL BANKING AGREEMENT')",
+    "nmlsLink": "a:has-text('NMLS')",
+    "facebookLink": "a[name='Facebook (Open in new window)'], footer a[href*='facebook'], [aria-label*='Facebook']",
+    "twitterLink": "a[name='Twitter (Open in new window)'], footer a[href*='twitter'], [aria-label*='Twitter']",
+    "youtubeLink": "a[name='YouTube (Open in new window)'], footer a[href*='youtube'], [aria-label*='YouTube']",
+    "linkedinLink": "a[name='LinkedIn (Open in new window)'], footer a[href*='linkedin'], [aria-label*='LinkedIn']",
+    "appVersionButton": "button:has-text('App version')"
+  },
+  "D1LoginPage": {
+    "usernameField": "input[name='username'], input[id*='user'], input[autocomplete='username'], [aria-label*='User']",
+    "passwordField": "input[type='password'], input[name='password'], input[autocomplete='current-password'], [aria-label*='Password']",
+    "loginButton": "button:has-text('Login'), button:has-text('Sign In'), input[type='submit'][value*='Log']"
+  },
+  "D1RoleSelectionPage": {
+    "roleOptionRadio": "input[type='radio'], [role='radio']",
+    "continueButton": "button:has-text('Continue'), input[type='submit'][value*='Continue'], input[type='button'][value*='Continue']"
+  },
+  "D1CustomerContextPage": {
+    "regionDropdown": "select[name*='region'], select[id*='region'], [aria-label*='Region']",
+    "branchDropdown": "select[name*='branch'], select[id*='branch'], [aria-label*='Branch']",
+    "continueButton": "button:has-text('Continue'), input[type='submit'][value*='Continue'], input[type='button'][value*='Continue']"
+  },
+  "D1CustomerSearchPage": {
+    "searchButton": "button:has-text('Search'), input[type='submit'][value*='Search'], input[type='button'][value*='Search']",
+    "lastNameField": "input[name*='last'], input[id*='last'], [aria-label*='Last']"
+  },
+  "D1SearchResultsPage": {
+    "firstResultRow": "table tbody tr, [role='rowgroup'] [role='row'], [data-testid*='result-row']",
+    "loadCustomerButton": "button:has-text('Load Customer'), input[type='submit'][value*='Load Customer'], input[type='button'][value*='Load Customer']"
+  }
+}

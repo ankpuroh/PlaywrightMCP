@@ -196,6 +196,12 @@ export class LocatorDiscovery {
 
     // Try various selector patterns
     const patterns = [
+      // Highest priority: stable test attributes
+      (name: string) => `[data-testid="${name}"]`,
+      (name: string) => `[data-testid*="${name}"]`,
+      // Accessible name / aria
+      (name: string) => `[aria-label="${displayText || name}"]`,
+      (name: string) => `[aria-label*="${displayText || name}"]`,
       // Role-based selectors
       (name: string) =>
         `[role="${name.replace(/button$/i, "button")}"]`,
@@ -205,6 +211,11 @@ export class LocatorDiscovery {
       // Class-based selectors
       (name: string) => `.${name}`,
       (name: string) => `[class*="${name}"]`,
+      // Name attribute
+      (name: string) => `[name="${name}"]`,
+      (name: string) => `[name*="${name}"]`,
+      // Placeholder text
+      (name: string) => displayText ? `[placeholder*="${displayText}"]` : null,
       // Type-based selectors for inputs
       (name: string) =>
         name.includes("search")
@@ -217,13 +228,16 @@ export class LocatorDiscovery {
       // Button type selectors
       (name: string) =>
         name.includes("button") ? 'button[type="submit"]' : null,
-      // Common patterns
-      (name: string) => `[data-testid="${name}"]`,
-      (name: string) => `[aria-label*="${name}"]`,
       // Text-based selectors for human-friendly names (Playwright selectors)
       (name: string) => displayText ? `a:has-text("${displayText}")` : null,
       (name: string) => displayText ? `button:has-text("${displayText}")` : null,
       (name: string) => displayText ? `text=${displayText}` : null,
+      // XPath fallbacks
+      (name: string) => displayText ? `//*[@name="${name}"]` : null,
+      (name: string) => displayText ? `//*[@placeholder*="${displayText}"]` : null,
+      (name: string) => displayText ? `//button[normalize-space()="${displayText}"]` : null,
+      (name: string) => displayText ? `//a[normalize-space()="${displayText}"]` : null,
+      (name: string) => displayText ? `//*[contains(text(),"${displayText}")]` : null,
     ];
 
     for (const pattern of patterns) {
@@ -263,6 +277,41 @@ export class LocatorDiscovery {
     }
 
     return null;
+  }
+
+  /**
+   * Self-heal: given a logical target name that previously failed, take a fresh
+   * DOM snapshot and return the best candidate selector, then persist it.
+   * Returns the healed selector string, or null if healing failed.
+   */
+  async healLocator(
+    target: string,
+    selectorsPath: string = this.selectorsPath
+  ): Promise<string | null> {
+    this.logger.info(`[self-heal] Attempting to heal locator for "${target}"`);
+
+    const snapshot = await this.getPageSnapshot();
+    if (!snapshot) {
+      this.logger.warn(`[self-heal] No snapshot available for healing "${target}"`);
+      return null;
+    }
+
+    const snapshotText = JSON.stringify(snapshot, null, 2);
+    const healed = this.findLocatorByName(target, snapshotText, snapshot);
+
+    if (!healed) {
+      this.logger.warn(`[self-heal] Could not find alternative locator for "${target}"`);
+      return null;
+    }
+
+    this.logger.success(`[self-heal] Healed locator for "${target}"`, { healed });
+
+    // Persist the healed selector immediately
+    const existing = await this.loadCurrentSelectors();
+    existing[target] = healed;
+    await this.saveDiscoveredLocators(existing);
+
+    return healed;
   }
 
   /**
@@ -460,7 +509,8 @@ export class LocatorDiscovery {
         }
 
         for (const target of targetsToConsider) {
-          if (!target || selectors[target]) continue;
+          if (!target) continue;
+          if (selectors[target] && selectors[target] !== LOCATOR_NOT_OBSERVED_MESSAGE) continue;
 
           let discoveredLocator = null;
           if (postSnapshotText) {

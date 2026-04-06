@@ -16,6 +16,26 @@ export interface MCPToolResult {
   isError?: boolean;
 }
 
+export function parseServerCommand(commandLine: string): {
+  command: string;
+  args: string[];
+} {
+  const parts: string[] = [];
+  const tokenPattern = /"([^"]*)"|'([^']*)'|(\S+)/g;
+  let match: RegExpExecArray | null;
+
+  while ((match = tokenPattern.exec(commandLine)) !== null) {
+    parts.push(match[1] ?? match[2] ?? match[3]);
+  }
+
+  if (parts.length === 0) {
+    throw new Error("MCP server command is empty");
+  }
+
+  const [command, ...args] = parts;
+  return { command, args };
+}
+
 /**
  * MCP Client for Playwright server
  * Handles connection and tool calls to the Playwright MCP server
@@ -46,8 +66,7 @@ export class PlaywrightMCPClient {
     try {
       this.logger.info(`Connecting to Playwright MCP server: ${this.serverCommand}`);
 
-      // Parse command and arguments
-      const [command, ...args] = this.serverCommand.split(' ');
+      const { command, args } = parseServerCommand(this.serverCommand);
 
       const transport = new StdioClientTransport({
         command,
@@ -100,7 +119,19 @@ export class PlaywrightMCPClient {
         content: result.content,
       });
 
-      return result as MCPToolResult;
+      const mcpResult = result as MCPToolResult;
+
+      // The Playwright MCP server signals failures by embedding an error message in
+      // content[0].text (starting with "Error:") rather than raising an MCP-level
+      // error.  Detect both the protocol-level isError flag and the text prefix so
+      // the executor's catch block receives a proper thrown error and can mark the
+      // step as failed instead of falsely reporting success.
+      const firstText = mcpResult.content?.[0]?.text ?? "";
+      if (mcpResult.isError || firstText.startsWith("Error:")) {
+        throw new Error(firstText || `Tool ${toolName} returned an error`);
+      }
+
+      return mcpResult;
     } catch (error) {
       this.logger.error(`Failed to call tool ${toolName}`, {
         error: String(error),
@@ -153,6 +184,16 @@ export class PlaywrightMCPClient {
   }
 
   /**
+   * Select dropdown option via Playwright MCP
+   */
+  async selectOption(ref: string, values: string[]): Promise<MCPToolResult> {
+    return this.callTool("mcp_microsoft_pla_browser_select_option", {
+      ref,
+      values,
+    });
+  }
+
+  /**
    * Wait for text to appear/disappear via Playwright MCP
    */
   async waitFor(text?: string, time?: number): Promise<MCPToolResult> {
@@ -194,6 +235,106 @@ export class PlaywrightMCPClient {
     } catch (error) {
       this.logger.warn("Error closing browser", { error: String(error) });
     }
+  }
+
+  /**
+   * Reload current page
+   */
+  async reload(): Promise<MCPToolResult> {
+    return this.callTool("mcp_microsoft_pla_browser_reload", {});
+  }
+
+  /**
+   * Get value or text content from an element
+   */
+  async getValue(ref: string): Promise<MCPToolResult> {
+    return this.callTool("mcp_microsoft_pla_browser_get_value", { ref });
+  }
+
+  /**
+   * Clear input text in an element
+   */
+  async clearText(ref: string): Promise<MCPToolResult> {
+    return this.callTool("mcp_microsoft_pla_browser_clear_text", { ref });
+  }
+
+  /**
+   * Check element visible
+   */
+  async isVisible(ref: string): Promise<MCPToolResult> {
+    return this.callTool("mcp_microsoft_pla_browser_is_visible", { ref });
+  }
+
+  /**
+   * Check element exists
+   */
+  async elementExists(ref: string): Promise<MCPToolResult> {
+    return this.callTool("mcp_microsoft_pla_browser_element_exists", { ref });
+  }
+
+  /**
+   * Scroll page count times
+   */
+  async scroll(count: number = 1): Promise<MCPToolResult> {
+    return this.callTool("mcp_microsoft_pla_browser_scroll", { count });
+  }
+
+  /**
+   * Focus and send ArrowDown key
+   */
+  async focusThenDownarrow(ref: string): Promise<MCPToolResult> {
+    return this.callTool("mcp_microsoft_pla_browser_focus_then_downarrow", { ref });
+  }
+
+  /**
+   * Focus and send ArrowDown + Tab
+   */
+  async sendDownarrowThenTab(ref: string): Promise<MCPToolResult> {
+    return this.callTool("mcp_microsoft_pla_browser_send_downarrow_tab", { ref });
+  }
+
+  /**
+   * Select dropdown option by index
+   */
+  async selectByIndex(ref: string, index: number): Promise<MCPToolResult> {
+    return this.callTool("mcp_microsoft_pla_browser_select_by_index", { ref, index });
+  }
+
+  /**
+   * Get all open tabs info
+   */
+  async getAllTabs(): Promise<MCPToolResult> {
+    return this.callTool("mcp_microsoft_pla_browser_get_all_tabs", {});
+  }
+
+  /**
+   * Switch to specified tab index
+   */
+  async switchTab(index: number): Promise<MCPToolResult> {
+    return this.callTool("mcp_microsoft_pla_browser_switch_tab", { index });
+  }
+
+  /**
+   * Switch to latest tab (helper)
+   */
+  async switchToLatestTab(): Promise<MCPToolResult> {
+    const tabs = await this.getAllTabs();
+    const tabList = JSON.parse(tabs.content?.[0]?.text || "[]");
+    const lastIndex = Array.isArray(tabList) ? tabList.length - 1 : -1;
+    if (lastIndex < 0) {
+      throw new Error("No tabs available to switch");
+    }
+    return this.switchTab(lastIndex);
+  }
+
+  /**
+   * Wait for new tab to appear
+   */
+  async waitForNewTab(initialCount?: number, timeout?: number): Promise<MCPToolResult> {
+    const args: Record<string, number> = {};
+    if (initialCount !== undefined) args.initialCount = initialCount;
+    if (timeout !== undefined) args.timeout = timeout;
+    return this.callTool("mcp_microsoft_pla_browser_wait_new_tab", args);
   }
 
   /**

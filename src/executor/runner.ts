@@ -2,6 +2,7 @@ import { TestFlow, validateFlow } from "../schema/stepSchema";
 import { PlaywrightMCPClient } from "./mcpClient";
 import { StepExecutor, ExecutionResult } from "./executor";
 import { Logger } from "../utils/logger";
+import { applyDataTemplateToFlow, DataTemplateOptions } from "../data/template";
 
 export interface ExecutionSummary {
   totalSteps: number;
@@ -19,15 +20,21 @@ export class TestRunner {
   private client: PlaywrightMCPClient;
   private executor: StepExecutor;
   private logger: Logger;
+  private testData: Record<string, unknown>;
+  private dataTemplateOptions: DataTemplateOptions;
 
   constructor(
     client: PlaywrightMCPClient,
     executor: StepExecutor,
-    logger: Logger
+    logger: Logger,
+    testData: Record<string, unknown> = {},
+    dataTemplateOptions: DataTemplateOptions = {}
   ) {
     this.client = client;
     this.executor = executor;
     this.logger = logger;
+    this.testData = testData;
+    this.dataTemplateOptions = dataTemplateOptions;
   }
 
   /**
@@ -36,12 +43,18 @@ export class TestRunner {
   async run(flow: TestFlow): Promise<ExecutionSummary> {
     const startTime = Date.now();
     const results: ExecutionResult[] = [];
+    const preparedFlow = applyDataTemplateToFlow(
+      flow,
+      this.testData,
+      this.dataTemplateOptions
+    );
 
     this.logger.info("Starting test execution", {
-      totalSteps: flow.length,
+      totalSteps: preparedFlow.length,
+      dataKeys: Object.keys(this.testData),
     });
 
-    for (const step of flow) {
+    for (const step of preparedFlow) {
       const result = await this.executor.execute(step);
       results.push(result);
 
@@ -56,7 +69,7 @@ export class TestRunner {
     const failedSteps = results.filter((r) => !r.success).length;
 
     const summary: ExecutionSummary = {
-      totalSteps: flow.length,
+      totalSteps: preparedFlow.length,
       passedSteps,
       failedSteps,
       totalDuration,

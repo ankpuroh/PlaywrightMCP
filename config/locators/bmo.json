@@ -1,0 +1,80 @@
+{
+  "BmoLoginPage": {
+    "registerButton": "role=link[name='Register']",
+    "registerLink": "role=link[name='Register']",
+    "userIdField": "[aria-label='User ID'], [name='onlineId'], input[name*='userId']",
+    "passwordField": "input[type='password'], [aria-label='Password']",
+    "signInButton": "role=button[name='Sign In'], button[type='submit']",
+    "signInHeading": "h1:has-text('Sign In'), [data-testid='login-heading']",
+    "rememberMeCheckbox": "input[type='checkbox'][aria-label*='Remember'], label:has-text('Remember me') input[type='checkbox']",
+    "rememberMeChecked": "input[type='checkbox'][aria-label*='Remember']:checked",
+    "rememberMeUnchecked": "input[type='checkbox'][aria-label*='Remember']:not(:checked)",
+    "forgotUserIdLink": "a:has-text('FORGOT USER ID'), role=link[name*='FORGOT USER ID']",
+    "forgotPasswordLink": "a:has-text('FORGOT PASSWORD'), role=link[name*='FORGOT PASSWORD']",
+    "loginNavLink": "nav a:has-text('Login'), role=link[name='Login']",
+    "contactSupportNavLink": "a:has-text('Contact & support'), role=link[name='Contact & support']",
+    "bmoAssistLink": "a:has-text('BMO Assist'), role=link[name='BMO Assist']",
+    "contactUsLink": "a:has-text('Contact us'), role=link[name='Contact us']",
+    "atmBranchLink": "a:has-text('ATM & Branch'), role=link[name*='ATM']",
+    "showPasswordToggle": "button[aria-label*='Show Password'], button[aria-label*='show password']",
+    "passwordFieldVisible": "input[type='text'][aria-label='Password'], input[type='text'][name='password']",
+    "errorBanner": "[role='alert'], [aria-live='assertive'], .error-banner",
+    "userIdRequiredMsg": "text=User ID is required, [class*='error']:near([aria-label='User ID'])",
+    "passwordRequiredMsg": "text=Password is required, [class*='error']:near(input[type='password'])"
+  },
+  "BmoForgotUserIdPage": {
+    "pageHeading": "h1:has-text('Forgot User ID'), h2:has-text('Forgot User ID')",
+    "accountTypeSelector": "[aria-label='Account Type'], select[name*='account'], [data-testid='account-type']",
+    "accountNumberField": "[aria-label='Account Number'], input[name*='accountNumber']",
+    "ssnTinRadio": "input[type='radio'][name*='ssn'], [aria-label*='SSN']",
+    "continueButton": "role=button[name='Continue'], button:has-text('Continue')",
+    "cancelButton": "role=button[name='Cancel'], a:has-text('Cancel'), button:has-text('Cancel')",
+    "verifyAnotherWayLink": "a:has-text('Verify another way'), role=link[name*='Verify another way']",
+    "errorBanner": "[role='alert'], [aria-live='assertive'], .error-banner",
+    "accountTypeRequiredMsg": "text=Account type is required, [class*='error']:near([aria-label='Account Type'])",
+    "accountNumberValidationMsg": "text=Account number is required, [class*='error']:near([aria-label='Account Number'])",
+    "ssnValidationMsg": "text=SSN is required, [class*='error']:near([name*='ssn'])"
+  },
+  "BmoVerifyAnotherWayPage": {
+    "pageHeading": "h1:has-text('Verify'), h2:has-text('Verify another way')",
+    "emailField": "input[type='email'], [aria-label='Email'], input[name*='email']",
+    "ssnTinSection": "[aria-label*='SSN'], [name*='ssn'], [data-testid*='ssn']",
+    "backButton": "button:has-text('Back'), role=button[name='Back'], a:has-text('Back')",
+    "continueButton": "role=button[name='Continue'], button:has-text('Continue')",
+    "errorBanner": "[role='alert'], [aria-live='assertive'], .error-banner",
+    "emailValidationMsg": "text=Email is required, [class*='error']:near(input[type='email'])",
+    "ssnValidationMsg": "text=SSN is required, [class*='error']:near([name*='ssn'])"
+  },
+  "BmoForgotPasswordPage": {
+    "pageHeading": "h1:has-text('Forgot Password'), h2:has-text('Forgot Password')",
+    "userIdField": "[aria-label='User ID'], input[name*='userId'], [name='onlineId']",
+    "ssnTinOptions": "input[type='radio'][name*='ssn'], [aria-label*='SSN']",
+    "continueButton": "role=button[name='Continue'], button:has-text('Continue')",
+    "cancelButton": "role=button[name='Cancel'], a:has-text('Cancel'), button:has-text('Cancel')"
+  },
+  "BmoEnrollmentPage": {
+    "enrollmentHeading": "h1:has-text('Set up'), h1:has-text('online account'), [data-testid='enrollment-heading']",
+    "progressIndicator": "[aria-label*='step'], [class*='progress'], [role='progressbar'], [data-testid='progress']",
+    "enrollmentFields": "form input:first-of-type, [data-testid='enrollment-form'] input"
+  },
+  "BmoContactSupportMenu": {
+    "menuContainer": "[role='menu'], [aria-label*='Contact'], [data-testid='contact-support-menu']",
+    "faqOption": "role=menuitem[name*='Frequently Asked'], a:has-text('Frequently Asked Questions')",
+    "findBranchOption": "role=menuitem[name*='branch'], a:has-text('Find a branch')",
+    "callBmoOption": "role=menuitem[name*='Call BMO'], a:has-text('Call BMO')"
+  },
+  "BmoFooterSection": {
+    "footerContainer": "footer, [role='contentinfo']",
+    "privacyLink": "footer a:has-text('Privacy'), role=link[name='Privacy']",
+    "legalLink": "footer a:has-text('Legal'), role=link[name='Legal']",
+    "securityLink": "footer a:has-text('Security'), role=link[name='Security']",
+    "memberFdicLink": "footer a:has-text('Member FDIC'), role=link[name*='FDIC']",
+    "digitalBankingAgreementLink": "footer a:has-text('Digital Banking Agreement'), role=link[name*='Banking Agreement']",
+    "nmlsLink": "footer a:has-text('NMLS'), role=link[name='NMLS']",
+    "facebookLink": "footer a[href*='facebook'], role=link[name='Facebook']",
+    "twitterLink": "footer a[href*='twitter'], role=link[name='Twitter']",
+    "youtubeLink": "footer a[href*='youtube'], role=link[name='YouTube']",
+    "linkedinLink": "footer a[href*='linkedin'], role=link[name='LinkedIn']",
+    "appVersionButton": "button[aria-label*='version'], footer button:has-text('Version'), [data-testid='app-version']"
+  }
+}

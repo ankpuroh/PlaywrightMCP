@@ -1,0 +1,38 @@
+[
+  {
+    "id": "step-1",
+    "action": "navigate",
+    "target": "{{bmoBaseUrl}}",
+    "metadata": { "originalEnglish": "From fresh login page with no input." }
+  },
+  {
+    "id": "step-2",
+    "action": "click",
+    "target": "BmoLoginPage.signInButton",
+    "metadata": { "originalEnglish": "Click Sign In with no input." }
+  },
+  {
+    "id": "step-3",
+    "action": "assertVisible",
+    "target": "BmoLoginPage.errorBanner",
+    "metadata": { "originalEnglish": "A page-level error banner appears indicating missing required fields." }
+  },
+  {
+    "id": "step-4",
+    "action": "assertVisible",
+    "target": "BmoLoginPage.userIdRequiredMsg",
+    "metadata": { "originalEnglish": "User ID required validation message appears." }
+  },
+  {
+    "id": "step-5",
+    "action": "assertVisible",
+    "target": "BmoLoginPage.passwordRequiredMsg",
+    "metadata": { "originalEnglish": "Password required validation message appears." }
+  },
+  {
+    "id": "step-6",
+    "action": "assertVisible",
+    "target": "BmoLoginPage.signInButton",
+    "metadata": { "originalEnglish": "User remains on login page and sign-in is not submitted." }
+  }
+]

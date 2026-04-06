@@ -33,6 +33,46 @@ export async function loadSelectors(
 }
 
 /**
+ * Load page object model configuration
+ */
+export async function loadPageObjects(
+  configPath: string = "./config/locators/pageObjects.json"
+): Promise<Record<string, Record<string, string>>> {
+  try {
+    const absolutePath = path.resolve(configPath);
+    if (!(await fs.pathExists(absolutePath))) {
+      console.warn(`POM config not found at ${absolutePath}, returning empty map`);
+      return {};
+    }
+    return fs.readJSON(absolutePath);
+  } catch (error) {
+    throw new Error(`Failed to load page objects: ${error}`);
+  }
+}
+
+/**
+ * Load parameterized test data
+ */
+export async function loadTestData(
+  dataPath?: string
+): Promise<Record<string, unknown>> {
+  try {
+    if (!dataPath) {
+      return {};
+    }
+
+    const absolutePath = path.resolve(dataPath);
+    if (!(await fs.pathExists(absolutePath))) {
+      throw new Error(`Test data file not found at ${absolutePath}`);
+    }
+
+    return fs.readJSON(absolutePath);
+  } catch (error) {
+    throw new Error(`Failed to load test data: ${error}`);
+  }
+}
+
+/**
  * Load environment configuration
  */
 export async function loadEnvConfig(

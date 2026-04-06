@@ -1,0 +1,51 @@
+[
+  {
+    "id": "step-1",
+    "action": "navigate",
+    "target": "{{bmoBaseUrl}}",
+    "metadata": {
+      "originalEnglish": "Navigate to URL https://usdigital.bmo.com/www/#/login"
+    }
+  },
+  {
+    "id": "step-2",
+    "action": "click",
+    "target": "BmoLoginPage.registerButton",
+    "metadata": {
+      "originalEnglish": "Click on button Register"
+    }
+  },
+  {
+    "id": "step-3",
+    "action": "click",
+    "target": "BmoRegisterPage.accountTypeDropdown",
+    "metadata": {
+      "originalEnglish": "Click on Account Type"
+    }
+  },
+  {
+    "id": "step-4",
+    "action": "click",
+    "target": "BmoRegisterPage.checkingOption",
+    "metadata": {
+      "originalEnglish": "Click on \"Checking\""
+    }
+  },
+  {
+    "id": "step-5",
+    "action": "click",
+    "target": "BmoRegisterPage.accountNumberField",
+    "metadata": {
+      "originalEnglish": "Click on AccountNumber"
+    }
+  },
+  {
+    "id": "step-6",
+    "action": "fill",
+    "target": "BmoRegisterPage.accountNumberField",
+    "value": "{{bmoAccountNumber}}",
+    "metadata": {
+      "originalEnglish": "Enter AccountNumber in the field"
+    }
+  }
+]

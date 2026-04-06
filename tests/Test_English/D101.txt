@@ -1,0 +1,15 @@
+Navigate to URL https://login-uat.fisglobal.com/idp/DOBMOC-BT-SIT/?ClientID=BMOC-SIT-ONE
+Enter D1 Username in username field
+enter password in password field
+click on login page
+select role radio option
+click on continue
+Select region from dropdown
+select branch from dropdown
+click on continue
+Click on Search button
+click on Lastname testbox
+Enter "Test" in Lastname
+Click on Search button
+Click on Search result row
+Click on load customer button

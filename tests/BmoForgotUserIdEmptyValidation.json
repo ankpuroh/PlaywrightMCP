@@ -1,0 +1,50 @@
+[
+  {
+    "id": "step-1",
+    "action": "navigate",
+    "target": "{{bmoBaseUrl}}",
+    "metadata": { "originalEnglish": "Navigate to BMO login page." }
+  },
+  {
+    "id": "step-2",
+    "action": "click",
+    "target": "BmoLoginPage.forgotUserIdLink",
+    "metadata": { "originalEnglish": "Navigate to Forgot User ID page." }
+  },
+  {
+    "id": "step-3",
+    "action": "click",
+    "target": "BmoForgotUserIdPage.continueButton",
+    "metadata": { "originalEnglish": "On Forgot User ID page, leave all fields blank and click Continue." }
+  },
+  {
+    "id": "step-4",
+    "action": "assertVisible",
+    "target": "BmoForgotUserIdPage.errorBanner",
+    "metadata": { "originalEnglish": "Page-level validation banner appears." }
+  },
+  {
+    "id": "step-5",
+    "action": "assertVisible",
+    "target": "BmoForgotUserIdPage.accountTypeRequiredMsg",
+    "metadata": { "originalEnglish": "Account type required message appears." }
+  },
+  {
+    "id": "step-6",
+    "action": "assertVisible",
+    "target": "BmoForgotUserIdPage.accountNumberValidationMsg",
+    "metadata": { "originalEnglish": "Account number validation message appears." }
+  },
+  {
+    "id": "step-7",
+    "action": "assertVisible",
+    "target": "BmoForgotUserIdPage.ssnValidationMsg",
+    "metadata": { "originalEnglish": "SSN validation message appears with expected format guidance." }
+  },
+  {
+    "id": "step-8",
+    "action": "assertVisible",
+    "target": "BmoForgotUserIdPage.continueButton",
+    "metadata": { "originalEnglish": "User remains on Forgot User ID page." }
+  }
+]

@@ -1,0 +1,12 @@
+{
+  "defaults": {
+    "guru99UserId": "XYZ",
+    "guru99Password": "password"
+  },
+  "datasets": {
+    "negative": {
+      "guru99UserId": "invalid_user",
+      "guru99Password": "invalid_password"
+    }
+  }
+}

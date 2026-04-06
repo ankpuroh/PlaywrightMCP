@@ -1,0 +1,10 @@
+{
+  "defaults": {
+    "bmoBaseUrl": "https://usdigital.bmo.com/www/#/login"
+  },
+  "datasets": {
+    "qa": {
+      "bmoBaseUrl": "https://usdigital.bmo.com/www/#/login"
+    }
+  }
+}

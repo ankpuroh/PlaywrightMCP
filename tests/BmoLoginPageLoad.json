@@ -1,0 +1,86 @@
+[
+  {
+    "id": "step-1",
+    "action": "navigate",
+    "target": "{{bmoBaseUrl}}",
+    "metadata": { "originalEnglish": "Open the seeded application URL in a fresh browser session." }
+  },
+  {
+    "id": "step-2",
+    "action": "assertVisible",
+    "target": "BmoLoginPage.signInHeading",
+    "metadata": { "originalEnglish": "Sign-in page is displayed with title indicating BMO Digital Banking login." }
+  },
+  {
+    "id": "step-3",
+    "action": "assertVisible",
+    "target": "BmoLoginPage.userIdField",
+    "metadata": { "originalEnglish": "User ID field is visible." }
+  },
+  {
+    "id": "step-4",
+    "action": "assertVisible",
+    "target": "BmoLoginPage.passwordField",
+    "metadata": { "originalEnglish": "Password field is visible." }
+  },
+  {
+    "id": "step-5",
+    "action": "assertVisible",
+    "target": "BmoLoginPage.signInButton",
+    "metadata": { "originalEnglish": "Sign In button is visible." }
+  },
+  {
+    "id": "step-6",
+    "action": "assertVisible",
+    "target": "BmoLoginPage.rememberMeCheckbox",
+    "metadata": { "originalEnglish": "Remember me checkbox is visible." }
+  },
+  {
+    "id": "step-7",
+    "action": "assertVisible",
+    "target": "BmoLoginPage.forgotUserIdLink",
+    "metadata": { "originalEnglish": "FORGOT USER ID? link is visible." }
+  },
+  {
+    "id": "step-8",
+    "action": "assertVisible",
+    "target": "BmoLoginPage.forgotPasswordLink",
+    "metadata": { "originalEnglish": "FORGOT PASSWORD? link is visible." }
+  },
+  {
+    "id": "step-9",
+    "action": "assertVisible",
+    "target": "BmoLoginPage.registerLink",
+    "metadata": { "originalEnglish": "Register link is visible." }
+  },
+  {
+    "id": "step-10",
+    "action": "assertVisible",
+    "target": "BmoLoginPage.loginNavLink",
+    "metadata": { "originalEnglish": "Top navigation includes Login." }
+  },
+  {
+    "id": "step-11",
+    "action": "assertVisible",
+    "target": "BmoLoginPage.contactSupportNavLink",
+    "metadata": { "originalEnglish": "Top navigation includes Contact & support." }
+  },
+  {
+    "id": "step-12",
+    "action": "assertVisible",
+    "target": "BmoLoginPage.bmoAssistLink",
+    "metadata": { "originalEnglish": "BMO Assist quick link is present." }
+  },
+  {
+    "id": "step-13",
+    "action": "assertVisible",
+    "target": "BmoLoginPage.contactUsLink",
+    "metadata": { "originalEnglish": "Contact us quick link is present." }
+  },
+  {
+    "id": "step-14",
+    "action": "assertVisible",
+    "target": "BmoLoginPage.atmBranchLink",
+    "metadata": { "originalEnglish": "ATM & Branch quick link is present." }
+  }
+]

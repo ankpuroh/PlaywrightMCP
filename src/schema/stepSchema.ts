@@ -11,7 +11,26 @@ export const ActionTypes = z.enum([
   "screenshot",
   "select",
   "waitForSelector",
-  "wait"
+  "wait",
+  "reload_window",
+  "quit",
+  "get_value",
+  "clear_text",
+  "assert_value",
+  "is_element_visible",
+  "element_exists",
+  "scroll_page",
+  "focus_then_downarrow",
+  "send_downarrow_then_tab",
+  "select_dropdown_by_index",
+  "mat_select_by_value",
+  "mat_scroll_to_value",
+  "click_n_switch_tab",
+  "switch_to_tab",
+  "wait_for_new_tab",
+  "switch_to_latest_tab",
+  "click_and_switch_to_new_tab",
+  "get_all_tabs_info"
 ]);
 
 export type ActionType = z.infer<typeof ActionTypes>;

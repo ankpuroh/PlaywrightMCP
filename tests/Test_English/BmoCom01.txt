@@ -1,0 +1,6 @@
+Navigate to URL https://usdigital.bmo.com/www/#/login
+Click on button Register
+Click on Account Type
+Click on "Checking"
+Click on AccountNumber
+Enter AccountNumber in the field

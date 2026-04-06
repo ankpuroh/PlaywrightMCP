@@ -1,0 +1,39 @@
+[
+  {
+    "id": "step-1",
+    "action": "navigate",
+    "target": "https://the-internet.herokuapp.com/",
+    "metadata": { "originalEnglish": "navigate to https://the-internet.herokuapp.com/" }
+  },
+  {
+    "id": "step-1a",
+    "action": "waitFor",
+    "target": "page load",
+    "metadata": { "originalEnglish": "Wait 3 seconds for page to load" }
+  },
+  {
+    "id": "step-2",
+    "action": "click",
+    "target": "dropdown_link",
+    "metadata": { "originalEnglish": "click on link Dropdown" }
+  },
+  {
+    "id": "step-2a",
+    "action": "waitFor",
+    "target": "navigation completion",
+    "metadata": { "originalEnglish": "Wait 3 seconds after clicking Dropdown link" }
+  },
+  {
+    "id": "step-3",
+    "action": "select",
+    "target": "dropdown_menu",
+    "value": "Option 1",
+    "metadata": { "originalEnglish": "In the dropdown select option 1" }
+  },
+  {
+    "id": "step-3a",
+    "action": "waitFor",
+    "target": "selection completion",
+    "metadata": { "originalEnglish": "Wait 3 seconds after selecting Option 1" }
+  }
+]

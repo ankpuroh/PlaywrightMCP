@@ -2,7 +2,7 @@
   {
     "id": "step-1",
     "action": "navigate",
-    "target": "https://example.com",
+    "target": "{{baseUrl}}",
     "metadata": {
       "originalEnglish": "Navigate to the application"
     }
@@ -18,7 +18,7 @@
   {
     "id": "step-3",
     "action": "click",
-    "target": "searchButton",
+    "target": "SamplePage.searchButton",
     "metadata": {
       "originalEnglish": "Click on the search button"
     }
@@ -26,8 +26,8 @@
   {
     "id": "step-4",
     "action": "fill",
-    "target": "searchInput",
-    "value": "automation framework",
+    "target": "SamplePage.searchInput",
+    "value": "{{searchTerm}}",
     "metadata": {
       "originalEnglish": "Enter search term 'automation framework'"
     }

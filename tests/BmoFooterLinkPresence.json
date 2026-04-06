@@ -1,0 +1,74 @@
+[
+  {
+    "id": "step-1",
+    "action": "navigate",
+    "target": "{{bmoBaseUrl}}",
+    "metadata": { "originalEnglish": "Navigate to login page." }
+  },
+  {
+    "id": "step-2",
+    "action": "scroll_page",
+    "target": "BmoFooterSection.footerContainer",
+    "metadata": { "originalEnglish": "Scroll to footer area on login page." }
+  },
+  {
+    "id": "step-3",
+    "action": "assertVisible",
+    "target": "BmoFooterSection.privacyLink",
+    "metadata": { "originalEnglish": "Privacy legal link is visible." }
+  },
+  {
+    "id": "step-4",
+    "action": "assertVisible",
+    "target": "BmoFooterSection.legalLink",
+    "metadata": { "originalEnglish": "Legal link is visible." }
+  },
+  {
+    "id": "step-5",
+    "action": "assertVisible",
+    "target": "BmoFooterSection.securityLink",
+    "metadata": { "originalEnglish": "Security link is visible." }
+  },
+  {
+    "id": "step-6",
+    "action": "assertVisible",
+    "target": "BmoFooterSection.memberFdicLink",
+    "metadata": { "originalEnglish": "Member FDIC link is visible." }
+  },
+  {
+    "id": "step-7",
+    "action": "assertVisible",
+    "target": "BmoFooterSection.digitalBankingAgreementLink",
+    "metadata": { "originalEnglish": "Digital Banking Agreement link is visible." }
+  },
+  {
+    "id": "step-8",
+    "action": "assertVisible",
+    "target": "BmoFooterSection.nmlsLink",
+    "metadata": { "originalEnglish": "NMLS link is visible." }
+  },
+  {
+    "id": "step-9",
+    "action": "assertVisible",
+    "target": "BmoFooterSection.facebookLink",
+    "metadata": { "originalEnglish": "Facebook social link is visible." }
+  },
+  {
+    "id": "step-10",
+    "action": "assertVisible",
+    "target": "BmoFooterSection.twitterLink",
+    "metadata": { "originalEnglish": "Twitter social link is visible." }
+  },
+  {
+    "id": "step-11",
+    "action": "assertVisible",
+    "target": "BmoFooterSection.youtubeLink",
+    "metadata": { "originalEnglish": "YouTube social link is visible." }
+  },
+  {
+    "id": "step-12",
+    "action": "assertVisible",
+    "target": "BmoFooterSection.linkedinLink",
+    "metadata": { "originalEnglish": "LinkedIn social link is visible. Links indicate opening in a new window where expected." }
+  }
+]

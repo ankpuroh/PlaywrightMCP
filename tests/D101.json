@@ -1,0 +1,127 @@
+[
+  {
+    "id": "step-1",
+    "action": "navigate",
+    "target": "{{d101BaseUrl}}",
+    "metadata": {
+      "originalEnglish": "Navigate to URL https://login-uat.fisglobal.com/idp/DOBMOC-BT-SIT/?ClientID=BMOC-SIT-ONE"
+    }
+  },
+  {
+    "id": "step-2",
+    "action": "fill",
+    "target": "D1LoginPage.usernameField",
+    "value": "{{d1Username}}",
+    "metadata": {
+      "originalEnglish": "Enter D1 Username in username field"
+    }
+  },
+  {
+    "id": "step-3",
+    "action": "fill",
+    "target": "D1LoginPage.passwordField",
+    "value": "{{d1Password}}",
+    "metadata": {
+      "originalEnglish": "enter password in password field"
+    }
+  },
+  {
+    "id": "step-4",
+    "action": "click",
+    "target": "D1LoginPage.loginButton",
+    "metadata": {
+      "originalEnglish": "click on login page"
+    }
+  },
+  {
+    "id": "step-5",
+    "action": "click",
+    "target": "D1RoleSelectionPage.roleOptionRadio",
+    "metadata": {
+      "originalEnglish": "select role radio option"
+    }
+  },
+  {
+    "id": "step-6",
+    "action": "click",
+    "target": "D1RoleSelectionPage.continueButton",
+    "metadata": {
+      "originalEnglish": "click on continue"
+    }
+  },
+  {
+    "id": "step-7",
+    "action": "select",
+    "target": "D1CustomerContextPage.regionDropdown",
+    "value": "{{d1Region}}",
+    "metadata": {
+      "originalEnglish": "Select region from dropdown"
+    }
+  },
+  {
+    "id": "step-8",
+    "action": "select",
+    "target": "D1CustomerContextPage.branchDropdown",
+    "value": "{{d1Branch}}",
+    "metadata": {
+      "originalEnglish": "select branch from dropdown"
+    }
+  },
+  {
+    "id": "step-9",
+    "action": "click",
+    "target": "D1CustomerContextPage.continueButton",
+    "metadata": {
+      "originalEnglish": "click on continue"
+    }
+  },
+  {
+    "id": "step-10",
+    "action": "click",
+    "target": "D1CustomerSearchPage.searchButton",
+    "metadata": {
+      "originalEnglish": "Click on Search button"
+    }
+  },
+  {
+    "id": "step-11",
+    "action": "click",
+    "target": "D1CustomerSearchPage.lastNameField",
+    "metadata": {
+      "originalEnglish": "click on Lastname testbox"
+    }
+  },
+  {
+    "id": "step-12",
+    "action": "fill",
+    "target": "D1CustomerSearchPage.lastNameField",
+    "value": "{{d1LastName}}",
+    "metadata": {
+      "originalEnglish": "Enter \"Test\" in Lastname"
+    }
+  },
+  {
+    "id": "step-13",
+    "action": "click",
+    "target": "D1CustomerSearchPage.searchButton",
+    "metadata": {
+      "originalEnglish": "Click on Search button"
+    }
+  },
+  {
+    "id": "step-14",
+    "action": "click",
+    "target": "D1SearchResultsPage.firstResultRow",
+    "metadata": {
+      "originalEnglish": "Click on Search result row"
+    }
+  },
+  {
+    "id": "step-15",
+    "action": "click",
+    "target": "D1SearchResultsPage.loadCustomerButton",
+    "metadata": {
+      "originalEnglish": "Click on load customer button"
+    }
+  }
+]

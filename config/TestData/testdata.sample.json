@@ -1,0 +1,11 @@
+{
+  "defaults": {
+    "baseUrl": "https://example.com",
+    "searchTerm": "playwright mcp automation"
+  },
+  "datasets": {
+    "alt-search": {
+      "searchTerm": "model context protocol"
+    }
+  }
+}

@@ -1,0 +1,56 @@
+[
+  {
+    "id": "step-1",
+    "action": "navigate",
+    "target": "{{bmoBaseUrl}}",
+    "metadata": { "originalEnglish": "From login page." }
+  },
+  {
+    "id": "step-2",
+    "action": "click",
+    "target": "BmoLoginPage.forgotUserIdLink",
+    "metadata": { "originalEnglish": "Click FORGOT USER ID?." }
+  },
+  {
+    "id": "step-3",
+    "action": "assertVisible",
+    "target": "BmoForgotUserIdPage.pageHeading",
+    "metadata": { "originalEnglish": "Forgot User ID page opens." }
+  },
+  {
+    "id": "step-4",
+    "action": "assertVisible",
+    "target": "BmoForgotUserIdPage.accountTypeSelector",
+    "metadata": { "originalEnglish": "Form includes Account type selector." }
+  },
+  {
+    "id": "step-5",
+    "action": "assertVisible",
+    "target": "BmoForgotUserIdPage.accountNumberField",
+    "metadata": { "originalEnglish": "Account number field is present." }
+  },
+  {
+    "id": "step-6",
+    "action": "assertVisible",
+    "target": "BmoForgotUserIdPage.ssnTinRadio",
+    "metadata": { "originalEnglish": "SSN/TIN radio choices are present." }
+  },
+  {
+    "id": "step-7",
+    "action": "assertVisible",
+    "target": "BmoForgotUserIdPage.continueButton",
+    "metadata": { "originalEnglish": "Continue action is visible." }
+  },
+  {
+    "id": "step-8",
+    "action": "assertVisible",
+    "target": "BmoForgotUserIdPage.cancelButton",
+    "metadata": { "originalEnglish": "Cancel action is visible." }
+  },
+  {
+    "id": "step-9",
+    "action": "assertVisible",
+    "target": "BmoForgotUserIdPage.verifyAnotherWayLink",
+    "metadata": { "originalEnglish": "Verify another way link is visible in help section." }
+  }
+]

@@ -10,5 +10,10 @@
   "checkbox2": "//input[@type='checkbox'][2]",
   "add_remove_elements_link": "a:has-text(\"add/remove elements\")",
   "add_element_button": "button[text()=\"Add Element\"]",
-  "delete_button": "button[text()=\"Delete\"]"
+  "delete_button": "button[text()=\"Delete\"]",
+  "dropdown_link": "a:has-text(\"dropdown\")",
+  "dropdown_menu": "//select[@id='dropdown']",
+  "disappearing_elements_link": "a:has-text(\"disappearing elements\")",
+  "home_link": "a:has-text(\"home\")",
+  "{{bmoBaseUrl}}": "Need to provide locator as locator not observed"
 }
