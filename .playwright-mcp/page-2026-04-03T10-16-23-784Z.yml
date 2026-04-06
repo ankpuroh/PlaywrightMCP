@@ -1,0 +1,98 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - paragraph [ref=e5]: Playwright MCP Control Surface
+      - heading "Test Metadata and Data File Editor" [level=1] [ref=e6]
+      - paragraph [ref=e7]: Edit suite metadata in a structured table, update layered data files, and save changes directly back to disk.
+    - generic [ref=e8]:
+      - generic [ref=e9]: Connected
+      - generic [ref=e10]: Editor ready
+  - generic [ref=e11]:
+    - generic [ref=e12]:
+      - button "Test" [ref=e13] [cursor=pointer]
+      - button "Data" [ref=e14] [cursor=pointer]
+    - generic [ref=e15]:
+      - generic [ref=e16]:
+        - generic [ref=e17]:
+          - heading "Suite Metadata" [level=2] [ref=e18]
+          - paragraph [ref=e19]: Rows map directly to config/TestMetaData.json.
+        - generic [ref=e20]:
+          - button "Reload" [ref=e21] [cursor=pointer]
+          - button "Add Testcase" [ref=e22] [cursor=pointer]
+          - button "Save Test Metadata" [ref=e23] [cursor=pointer]
+      - generic [ref=e25]:
+        - generic [ref=e26]:
+          - generic [ref=e27]: Suite Name
+          - textbox "Suite Name" [ref=e28]:
+            - /placeholder: Sample Tagged Suite
+            - text: Sample Tagged Suite
+        - generic [ref=e29]:
+          - generic [ref=e30]: Dataset
+          - textbox "Dataset" [ref=e31]:
+            - /placeholder: qa
+            - text: qa
+        - generic [ref=e32]:
+          - generic [ref=e33]: Dataset Common
+          - textbox "Dataset Common" [ref=e34]:
+            - /placeholder: qa
+            - text: qa
+        - generic [ref=e35]:
+          - generic [ref=e36]: Dataset Domain
+          - textbox "Dataset Domain" [ref=e37]:
+            - /placeholder: regional
+      - table [ref=e39]:
+        - rowgroup [ref=e40]:
+          - row "ID File Tags Data Common Dataset Common Data Domain Dataset Domain Data Dataset Action" [ref=e41]:
+            - columnheader "ID" [ref=e42]
+            - columnheader "File" [ref=e43]
+            - columnheader "Tags" [ref=e44]
+            - columnheader "Data Common" [ref=e45]
+            - columnheader "Dataset Common" [ref=e46]
+            - columnheader "Data Domain" [ref=e47]
+            - columnheader "Dataset Domain" [ref=e48]
+            - columnheader "Data" [ref=e49]
+            - columnheader "Dataset" [ref=e50]
+            - columnheader "Action" [ref=e51]
+        - rowgroup [ref=e52]:
+          - row "guru99-login tests/Guru99.json smoke, login, guru99, feature-login config/TestData/common.json qa config/TestData/domain.guru99.json config/TestData/testdata.guru99.json negative Delete" [ref=e53]:
+            - cell "guru99-login" [ref=e54]:
+              - textbox "guru99-login" [ref=e55]
+            - cell "tests/Guru99.json" [ref=e56]:
+              - textbox "tests/Guru99.json" [ref=e57]
+            - cell "smoke, login, guru99, feature-login" [ref=e58]:
+              - textbox "smoke, login" [ref=e59]: smoke, login, guru99, feature-login
+            - cell "config/TestData/common.json" [ref=e60]:
+              - textbox "config/TestData/common.json" [ref=e61]
+            - cell "qa" [ref=e62]:
+              - textbox "qa" [ref=e63]
+            - cell "config/TestData/domain.guru99.json" [ref=e64]:
+              - textbox "config/TestData/domain.guru99.json" [ref=e65]
+            - cell [ref=e66]:
+              - textbox "regional" [ref=e67]
+            - cell "config/TestData/testdata.guru99.json" [ref=e68]:
+              - textbox "config/TestData/testdata.guru99.json" [ref=e69]
+            - cell "negative" [ref=e70]:
+              - textbox "negative" [ref=e71]
+            - cell "Delete" [ref=e72]:
+              - button "Delete" [ref=e73] [cursor=pointer]
+          - row "heroku-checkbox tests/Hiroku1.json smoke, checkbox, heroku, feature-checkboxes config/TestData/common.json qa config/TestData/domain.herokuapp.json config/TestData/testdata.hiroku1.json Delete" [ref=e74]:
+            - cell "heroku-checkbox" [ref=e75]:
+              - textbox "guru99-login" [ref=e76]: heroku-checkbox
+            - cell "tests/Hiroku1.json" [ref=e77]:
+              - textbox "tests/Guru99.json" [ref=e78]: tests/Hiroku1.json
+            - cell "smoke, checkbox, heroku, feature-checkboxes" [ref=e79]:
+              - textbox "smoke, login" [ref=e80]: smoke, checkbox, heroku, feature-checkboxes
+            - cell "config/TestData/common.json" [ref=e81]:
+              - textbox "config/TestData/common.json" [ref=e82]
+            - cell "qa" [ref=e83]:
+              - textbox "qa" [ref=e84]
+            - cell "config/TestData/domain.herokuapp.json" [ref=e85]:
+              - textbox "config/TestData/domain.guru99.json" [ref=e86]: config/TestData/domain.herokuapp.json
+            - cell [ref=e87]:
+              - textbox "regional" [ref=e88]
+            - cell "config/TestData/testdata.hiroku1.json" [ref=e89]:
+              - textbox "config/TestData/testdata.guru99.json" [ref=e90]: config/TestData/testdata.hiroku1.json
+            - cell [ref=e91]:
+              - textbox "negative" [ref=e92]
+            - cell "Delete" [ref=e93]:
+              - button "Delete" [ref=e94] [cursor=pointer]
