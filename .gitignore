@@ -1,6 +1,6 @@
 node_modules/
-dist/
 artifacts/
+dist/
 *.log
 .env
 .env.local
