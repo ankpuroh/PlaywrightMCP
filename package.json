@@ -6,10 +6,12 @@
   "scripts": {
     "build": "tsc",
     "dev": "ts-node src/cli/index.ts",
+    "gui": "ts-node src/gui/server.ts",
     "run-test": "ts-node src/cli/index.ts run-json",
+    "run-suite": "ts-node src/cli/index.ts run-suite",
     "discover-locators": "ts-node src/cli/index.ts discover-locators",
     "clean": "rm -rf dist",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node scripts/run-tests.js"
   },
   "keywords": [
     "playwright",
@@ -22,6 +24,7 @@
   "dependencies": {
     "@modelcontextprotocol/sdk": "^0.7.0",
     "chalk": "^5.3.0",
+    "express": "^5.2.1",
     "fs-extra": "^11.2.0",
     "nanoid": "^5.0.3",
     "playwright": "^1.58.2",
@@ -29,6 +32,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@types/express": "^5.0.6",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^20.10.6",
     "@types/yargs": "^17.0.35",
