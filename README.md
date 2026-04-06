@@ -12,6 +12,8 @@ This framework bridges the gap between AI-generated test specifications (JSON) a
 - **MCP Integration**: Communicates with Playwright MCP server via stdio transport
 - **Type Safety**: Full TypeScript implementation with Zod schema validation
 - **Selector Resolution**: Configurable element locators via `selectors.json`
+- **Runtime Self-Heal**: Automatically retries stale selectors during single-flow execution
+- **Parallel Suite Execution**: Run tagged suites with configurable workers
 - **Rich Logging**: Comprehensive execution logs with structured output
 - **Artifact Management**: Automatic screenshot and log collection
 - **CLI Interface**: Simple yargs-based command-line tool
@@ -56,17 +58,7 @@ npm install
 npm run build
 ```
 
-### 3. Start Playwright MCP Server
-
-In a separate terminal:
-
-```bash
-# Ensure Playwright MCP server is running
-# This should be started before running tests
-playwright-mcp
-```
-
-### 4. Run a Test
+### 3. Run a Test
 
 ```bash
 npm run run-test -- --file tests/sample.json
@@ -78,9 +70,74 @@ Or with custom options:
 npm run run-test -- \
   --file tests/sample.json \
   --selectors config/selectors.json \
+  --pom config/locators/pageObjects.json \
+  --dataCommon config/TestData/common.json \
+  --dataDomain config/TestData/domain.herokuapp.json \
+  --data config/TestData/testdata.sample.json \
+  --dataset alt-search \
   --output ./my-artifacts \
-  --mcp playwright-mcp
+  --selfHeal true
 ```
+
+The framework starts the bundled MCP server automatically with `node playwright-mcp-server.js`. Use `--mcp` only when you want to override that command.
+
+### Page Object Model + Parameterized Data
+
+- `--pom` loads page object aliases (for example `SamplePage.searchInput`)
+- Data is resolved using layered precedence:
+  - scenario data: `--data`
+  - domain data: `--dataDomain` (comma-separated files)
+  - common data: `--dataCommon`
+- Precedence order: `scenario > domain > common`
+- `--dataset` applies structured dataset variants from data files with `defaults` + `datasets`
+- `--strictData` (default true) fails the run when any placeholder is missing
+
+### Email-Friendly Reporting
+
+After every execution, the framework generates:
+
+- `report-email.html` (standard email-ready HTML report)
+- `report-email.txt` (plain text summary for email clients)
+
+## 🏷️ Tagged Testcase Execution
+
+Create a suite file (see `config/TestMetaData.json`) where each testcase has `tags` and optional data layer paths.
+
+Run all testcases in suite:
+
+```bash
+npm run run-suite -- --suite config/TestMetaData.json
+```
+
+Run only selected tag group:
+
+```bash
+npm run run-suite -- --suite config/TestMetaData.json --tags smoke,login
+```
+
+Exclude tag group:
+
+```bash
+npm run run-suite -- --suite config/TestMetaData.json --excludeTags slow,flaky
+```
+
+Run a suite with shared data layers:
+
+```bash
+npm run run-suite -- \
+  --suite config/TestMetaData.json \
+  --dataCommon config/TestData/common.json \
+  --dataDomain config/TestData/domain.guru99.json,config/TestData/domain.herokuapp.json \
+  --dataset qa
+```
+
+Run a suite in parallel:
+
+```bash
+npm run run-suite -- --suite config/TestMetaData.json --workers 3
+```
+
+When `--workers` is greater than `1`, self-heal is disabled automatically to avoid concurrent writes to `config/selectors.json`.
 
 ## 📋 JSON Test Schema
 
@@ -107,7 +164,9 @@ Each test flow is an array of steps following this schema:
 | `click` | Click element | `{ "action": "click", "target": "submitButton" }` |
 | `fill` | Type text into field | `{ "action": "fill", "target": "usernameField", "value": "admin" }` |
 | `press` | Press keyboard key | `{ "action": "press", "value": "Enter" }` |
+| `wait` | Wait for a fixed number of seconds | `{ "action": "wait", "target": "2", "time": 2 }` |
 | `waitFor` | Wait for text/time | `{ "action": "waitFor", "target": "Loading complete" }` |
+| `waitForSelector` | Wait until an element exists | `{ "action": "waitForSelector", "target": "loginButton", "time": 30 }` |
 | `screenshot` | Capture screen | `{ "action": "screenshot", "target": "page" }` |
 | `assertText` | Verify text presence | `{ "action": "assertText", "assert": "Success" }` |
 | `assertVisible` | Verify element visible | `{ "action": "assertVisible", "target": "welcomeMessage" }` |
@@ -128,18 +187,24 @@ Maps logical element names to CSS selectors:
 }
 ```
 
-### env.json
+### layered TestData files
 
-Environment-specific settings:
+The current framework resolves placeholders primarily from layered files under `config/TestData/`:
 
 ```json
 {
-  "baseUrl": "https://example.com",
-  "timeout": "30000",
-  "headless": "true",
-  "screenshotOnFailure": "true"
+  "defaults": {
+    "baseUrl": "https://example.com"
+  },
+  "datasets": {
+    "qa": {
+      "baseUrl": "https://qa.example.com"
+    }
+  }
 }
 ```
+
+Use `--dataCommon`, `--dataDomain`, `--data`, and optional dataset flags to resolve placeholders at runtime.
 
 ## 📝 Example Test Flow
 

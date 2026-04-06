@@ -130,19 +130,25 @@ logger.error("Step failed", { error: "Element not found" });
 **Functions**:
 - `loadTestFile()` - Load and parse JSON test
 - `loadSelectors()` - Load selector config
-- `loadEnvConfig()` - Load environment config
 - `ensureArtifactDir()` - Create artifact directory
 - `saveArtifact()` - Save file to artifacts
 
-### 4. CLI Layer (`src/cli/`)
+### 4. Data Layer (`src/data/`)
+
+**Responsibility**: Resolve layered test data and substitute placeholders
+
+**Files**:
+- `resolver.ts` - Merge common, domain, and scenario data files
+- `template.ts` - Apply `{{placeholder}}` substitutions to test steps
+
+### 5. CLI Layer (`src/cli/`)
 
 **Responsibility**: Command-line interface
 
-**Command**: `run-json`
-- `--file`: Test JSON file path
-- `--selectors`: Selectors config path
-- `--output`: Artifact directory
-- `--mcp`: MCP server command
+**Commands**:
+- `run-json`: Execute a single test flow
+- `run-suite`: Execute testcases from a suite file with optional tag filters and workers
+- `discover-locators`: Discover selectors and optionally run the test afterward
 
 **Flow**:
 ```
@@ -179,7 +185,8 @@ Save Artifacts & Logs
 ┌─────────────────────────────────────────────────┐
 │ Configuration Loading                            │
 │ - Load selectors.json                            │
-│ - Load env.json                                  │
+│ - Load page object aliases                        │
+│ - Resolve layered TestData                        │
 └────────────┬────────────────────────────────────┘
              ↓
 ┌─────────────────────────────────────────────────┐
@@ -272,18 +279,17 @@ Direct selectors (CSS/XPath)
 MCP Tool
 ```
 
-### Environment Config (`env.json`):
-- Base URL for navigation
-- Timeout values
-- Screenshot settings
-- Browser options
+### Data Configuration:
+- `config/selectors.json` for selector overrides
+- `config/locators/pageObjects.json` for page object aliases
+- `config/TestData/*.json` for common, domain, and scenario placeholder data
 
 ## Performance Considerations
 
-### Sequential Execution:
-- Steps execute one-by-one
-- No parallelization (maintains deterministic order)
-- Each step waits for previous to complete
+### Execution Model:
+- Steps inside a single testcase execute one-by-one
+- Suite execution can run multiple testcases in parallel with `--workers`
+- Parallel runs automatically disable self-heal to avoid concurrent selector updates
 
 ### Timing Insights:
 - Each step tracks duration

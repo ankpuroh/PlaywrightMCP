@@ -2,482 +2,293 @@
 
 ## Overview
 
-The Playwright MCP Automation Framework is a powerful tool for converting plain English test descriptions into executable automated tests using Playwright and Model Context Protocol (MCP). The framework automatically discovers web element locators and executes tests through a standardized JSON-based step format.
+This framework executes JSON-based automation flows through the Playwright MCP server. It supports locator discovery, runtime self-heal for single-flow execution, layered test data, tagged suite execution, and bounded parallel suite runs.
 
 ## Table of Contents
 
 1. [Setup and Installation](#setup-and-installation)
 2. [Framework Architecture](#framework-architecture)
-3. [Creating Test Cases in English](#creating-test-cases-in-english)
-4. [Converting English to JSON Steps](#converting-english-to-json-steps)
-5. [Locator Discovery](#locator-discovery)
-6. [Running Tests](#running-tests)
-7. [Viewing Reports and Artifacts](#viewing-reports-and-artifacts)
-8. [Advanced Features](#advanced-features)
-9. [Troubleshooting](#troubleshooting)
+3. [Authoring Tests](#authoring-tests)
+4. [JSON Step Format](#json-step-format)
+5. [Layered Test Data](#layered-test-data)
+6. [Locator Discovery](#locator-discovery)
+7. [Running Tests](#running-tests)
+8. [Viewing Reports and Artifacts](#viewing-reports-and-artifacts)
+9. [Advanced Features](#advanced-features)
+10. [Troubleshooting](#troubleshooting)
 
 ## Setup and Installation
 
 ### Prerequisites
 
-- **Node.js**: Version 18 or higher
-- **npm**: Latest version
-- **Git**: For cloning the repository
+- Node.js 18 or higher
+- npm
+- Git
 
-### Installation Steps
+### Installation
 
-1. **Clone the repository:**
-   ```bash
-   git clone <repository-url>
-   cd PlaywrightMCP2
-   ```
-
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
-
-3. **Install Playwright MCP Server globally:**
-   ```bash
-   npm install -g @executeautomation/playwright-mcp-server
-   ```
-
-4. **Build the project:**
-   ```bash
-   npm run build
-   ```
-
-### Configuration
-
-The framework uses several configuration files:
-
-- **`config/selectors.json`**: Stores discovered element selectors
-- **`config/env.json`**: Environment-specific configuration (optional)
-- **`tests/`**: Directory for test case files
-
-### Directory Structure
-
+```bash
+git clone <repository-url>
+cd PlaywrightMCP2
+npm install
+npm run build
 ```
+
+The framework starts the bundled MCP server by default with `node playwright-mcp-server.js`. Use `--mcp` only when you need to override that command.
+
+### Repository Layout
+
+```text
 PlaywrightMCP2/
 ├── config/
-│   ├── selectors.json    # Element selectors
-│   └── env.json         # Environment config
+│   ├── selectors.json
+│   ├── TestData/
+│   └── TestMetaData.json
 ├── src/
-│   ├── cli/             # Command-line interface
-│   ├── executor/        # Test execution engine
-│   ├── schema/          # JSON schema validation
-│   └── utils/           # Utility functions
-├── tests/               # Test case files
-├── artifacts/           # Execution artifacts and logs
-├── package.json
+├── tests/
+├── artifacts/
+├── ui/editor/
 └── playwright-mcp-server.js
 ```
 
 ## Framework Architecture
 
-### Core Components
+### Runtime Components
 
-1. **CLI Interface** (`src/cli/index.ts`)
-   - Command-line commands for test management
-   - Supports `run-json`, `discover-locators` commands
+1. `src/cli/index.ts`
+   Exposes `run-json`, `run-suite`, and `discover-locators`.
 
-2. **Test Executor** (`src/executor/`)
-   - `executor.ts`: Main test execution logic
-   - `mcpClient.ts`: MCP server communication
-   - `locatorDiscovery.ts`: Automatic locator discovery
+2. `src/executor/mcpClient.ts`
+   Manages stdio transport to the Playwright MCP server and wraps browser tool calls.
 
-3. **Schema Validation** (`src/schema/stepSchema.ts`)
-   - Zod-based validation for test steps
-   - Ensures data integrity
+3. `src/executor/executor.ts`
+   Converts each JSON step into a concrete MCP action.
 
-4. **Utilities** (`src/utils/`)
-   - File operations, logging, artifact management
+4. `src/executor/runner.ts`
+   Applies data templating, executes the flow, and returns the execution summary.
 
-### MCP Integration
+5. `src/executor/locatorDiscovery.ts`
+   Discovers selectors from page snapshots and supports runtime self-heal.
 
-The framework communicates with Playwright through the Model Context Protocol:
-- Browser navigation and interaction
-- Screenshot capture
-- Element inspection and snapshot
-- Keyboard and mouse events
+6. `src/data/resolver.ts` and `src/data/template.ts`
+   Merge layered data sources and substitute `{{placeholders}}` before execution.
 
-## Creating Test Cases in English
+### GUI Scope
 
-### Test Case Format
+`npm run gui` starts the local editor server. The current GUI is for metadata and layered test-data management. It is not a test flow editor and it does not include an artifacts viewer.
 
-Create test cases as plain text files with `.txt` extension in the `tests/Test_English/` directory. Each line represents one logical action.
+## Authoring Tests
 
-### Supported Actions
+### JSON-first Authoring
 
-- **Navigation**: "Open browser and navigate to https://example.com"
-- **Input**: "Enter 'username' in username field"
-- **Clicking**: "Click login button"
-- **Waiting**: "Wait for dashboard to load"
-- **Assertions**: "Verify welcome message is displayed"
-- **Screenshots**: "Take screenshot of homepage"
+The current framework is most reliable when tests are authored directly as JSON under `tests/`.
 
-### Example Test Case
+Recommended starting files:
+- `tests/sample.json`
+- `tests/seed.json`
+- `tests/Hiroku1.json`
 
-Create `tests/Test_English/TC01.txt`:
+### Plain-English Inputs
 
-```
-Open browser and navigate to https://www.saucedemo.com/
-Enter "standard_user" in username text field and "secret_sauce" in password field.
-Click on login button
-```
+Plain-English files can still live under `tests/Test_English/`, but this repository does not expose a standalone conversion CLI. Conversion is typically handled through the repository's Converter agent workflow or by manual JSON authoring.
 
-### Best Practices
+## JSON Step Format
 
-1. **Be specific**: Use clear, descriptive element names
-2. **One action per line**: Keep each line focused on a single action
-3. **Use quotes for values**: Wrap input values in quotes
-4. **Logical naming**: Use consistent naming conventions
-
-## Converting English to JSON Steps
-
-### JSON Step Schema
-
-Each test step follows this structure:
+Each test file is an array of steps.
 
 ```json
 {
   "id": "step-1",
-  "action": "navigate|click|fill|press|waitFor|assertText|assertVisible|screenshot",
-  "target": "logical_element_name",
-  "value": "input_value",           // Optional, for fill/press
-  "assert": "expected_value",       // Optional, for assertions
+  "action": "click",
+  "target": "LoginPage.submitButton",
+  "value": "optional",
+  "time": 10,
+  "assert": "optional",
   "metadata": {
-    "originalEnglish": "Original English text"
+    "originalEnglish": "Click submit"
   }
 }
 ```
 
-### Conversion Rules
+### Supported Core Actions
 
-1. **Target Naming**: Use underscores instead of spaces (e.g., `login_button`)
-2. **Sequential IDs**: Number steps as `step-1`, `step-2`, etc.
-3. **Optional Fields**: Omit `value` and `assert` when not applicable
-4. **Metadata**: Include original English text for traceability
+| Action | Purpose |
+|--------|---------|
+| `navigate` | Navigate to a URL |
+| `click` | Click an element |
+| `fill` | Type into an element |
+| `press` | Press a keyboard key |
+| `wait` | Wait a fixed number of seconds |
+| `waitFor` | Wait for text to appear, or wait fixed seconds if the target is numeric |
+| `waitForSelector` | Poll until a selector or logical target exists |
+| `select` | Select option(s) from dropdown |
+| `screenshot` | Save a screenshot into the artifact directory |
+| `assertText` | Assert text is present in the page snapshot |
+| `assertVisible` | Assert a target is visible in the page snapshot |
 
-### Automated Conversion
+Additional advanced actions are defined in `src/schema/stepSchema.ts`.
 
-The framework provides automated conversion. Place English test files in `tests/Test_English/` and the system will:
+## Layered Test Data
 
-1. Read the `.txt` file
-2. Convert each line to JSON steps
-3. Save as `.json` file in `tests/` directory
+The framework supports three data layers:
 
-### Manual Conversion Example
+1. Common: `--dataCommon`
+2. Domain/feature: `--dataDomain`
+3. Scenario: `--data`
 
-**Input (TC01.txt):**
-```
-Open browser and navigate to https://www.saucedemo.com/
-Enter "standard_user" in username text field and "secret_sauce" in password field.
-Click on login button
-```
+Precedence is `scenario > domain > common`.
 
-**Output (TC01.json):**
+Example structured file:
+
 ```json
-[
-  {
-    "id": "step-1",
-    "action": "navigate",
-    "target": "https://www.saucedemo.com/",
-    "metadata": {
-      "originalEnglish": "Open browser and navigate to https://www.saucedemo.com/"
-    }
+{
+  "defaults": {
+    "baseUrl": "https://example.com",
+    "username": "user1"
   },
-  {
-    "id": "step-2",
-    "action": "fill",
-    "target": "username_field",
-    "value": "standard_user",
-    "metadata": {
-      "originalEnglish": "Enter \"standard_user\" in username text field and \"secret_sauce\" in password field."
-    }
-  },
-  {
-    "id": "step-3",
-    "action": "fill",
-    "target": "password_field",
-    "value": "secret_sauce",
-    "metadata": {
-      "originalEnglish": "Enter \"standard_user\" in username text field and \"secret_sauce\" in password field."
-    }
-  },
-  {
-    "id": "step-4",
-    "action": "click",
-    "target": "login_button",
-    "metadata": {
-      "originalEnglish": "Click on login button"
+  "datasets": {
+    "qa": {
+      "baseUrl": "https://qa.example.com"
+    },
+    "staging": {
+      "baseUrl": "https://staging.example.com"
     }
   }
-]
+}
 ```
+
+Use `--dataset`, `--datasetCommon`, and `--datasetDomain` when selecting structured variants.
 
 ## Locator Discovery
 
-### Purpose
-
-Locator discovery automatically identifies CSS selectors for web elements by:
-1. Navigating to the target page
-2. Taking a page snapshot (accessibility tree)
-3. Analyzing element patterns
-4. Mapping logical names to actual selectors
-
-### Running Locator Discovery
+Run locator discovery before the first execution of a new test or after major DOM changes:
 
 ```bash
-# Discover locators for a specific test
-npm run discover-locators -- --file tests/TC01.json
-
-# Discover and run test automatically
-npm run discover-locators -- --file tests/TC01.json --run
+npm run discover-locators -- --file tests/MyFlow.json
 ```
 
-### How It Works
+Optional combined run:
 
-1. **Page Navigation**: Opens the URL from the first navigate step
-2. **Snapshot Analysis**: Captures page accessibility snapshot
-3. **Pattern Matching**: Uses intelligent algorithms to find elements
-4. **Fallback Discovery**: If snapshot fails, uses naming conventions
-5. **Selector Storage**: Updates `config/selectors.json` with discovered locators
-
-### Example Output
-
-```
-🔍 Discovering locators from test file...
-ℹ️  INFO Extracted target names: ["username_field", "password_field", "login_button"]
-ℹ️  INFO Inferred locator for "username_field": "input[type=\"text\"]"
-ℹ️  INFO Inferred locator for "password_field": "input[type=\"password\"]"
-ℹ️  INFO Inferred locator for "login_button": "button[type=\"submit\"]"
-✓ SUCCESS Updated selectors.json with discovered locators
+```bash
+npm run discover-locators -- --file tests/MyFlow.json --run
 ```
 
-### Manual Selector Configuration
+What it does:
 
-You can also manually add selectors to `config/selectors.json`:
-
-```json
-{
-  "username_field": "input#user-name",
-  "password_field": "input#password",
-  "login_button": "input#login-button"
-}
-```
+1. Loads the flow.
+2. Executes it step by step.
+3. Captures snapshots before and after steps.
+4. Writes newly discovered selectors into `config/selectors.json`.
 
 ## Running Tests
 
-### Basic Test Execution
+### Single Flow
 
 ```bash
-# Run a specific test
-npm run run-test -- --file tests/TC01.json
-
-# Run with custom selectors file
-npm run run-test -- --file tests/TC01.json --selectors ./config/custom-selectors.json
-
-# Run with custom output directory
-npm run run-test -- --file tests/TC01.json --output ./my-artifacts
+npm run run-test -- --file tests/Hiroku1.json \
+  --dataCommon config/TestData/common.json \
+  --dataDomain config/TestData/domain.herokuapp.json \
+  --data config/TestData/testdata.hiroku1.json \
+  --selfHeal true
 ```
 
-### Execution Flow
+### Suite Execution
 
-1. **Validation**: Validates JSON schema
-2. **MCP Connection**: Connects to Playwright MCP server
-3. **Step Execution**: Executes each step sequentially
-4. **Artifact Generation**: Saves screenshots, logs, and reports
-5. **Result Summary**: Displays pass/fail status
+Suite files use the `testcases` property, not `tests`.
 
-### Example Execution Output
-
-```
-📁 Artifact directory: ./artifacts/abc123
-📄 Loading test file: tests/TC01.json
-🔍 Loading selectors: ./config/selectors.json
-⚙️  Executing test steps...
-
-✅ Step step-1 completed: Navigated to https://www.saucedemo.com/
-✅ Step step-2 completed: Filled username_field with "standard_user"
-✅ Step step-3 completed: Filled password_field with "secret_sauce"
-✅ Step step-4 completed: Clicked on login_button
-
-╔════════════════════════════════════════╗
-║     TEST EXECUTION COMPLETED           ║
-╚════════════════════════════════════════╝
-Status: PASSED
-Total Steps: 4
-Passed: 4
-Failed: 0
-Duration: 33290ms
-Artifacts: ./artifacts/abc123
-```
-
-## Viewing Reports and Artifacts
-
-### Artifact Structure
-
-Each test execution creates an artifact directory with:
-
-```
-artifacts/{execution-id}/
-├── execution.log          # Detailed execution logs
-├── screenshots/           # Screenshot files (if any)
-├── step-1-screenshot.png  # Step-specific screenshots
-└── ...
-```
-
-### Log Files
-
-**execution.log** contains:
-- Step-by-step execution details
-- MCP tool calls and responses
-- Error messages and stack traces
-- Performance timing information
-
-### Viewing Logs
-
-```bash
-# View latest execution log
-cat artifacts/$(ls -t artifacts | head -1)/execution.log
-
-# Search for specific errors
-grep "ERROR" artifacts/*/execution.log
-```
-
-### Screenshot Analysis
-
-Screenshots are automatically captured for:
-- Screenshot actions in test steps
-- Failed steps (for debugging)
-- Key interaction points
-
-### Test Reports
-
-The CLI provides real-time reporting:
-- Step-by-step status (✅/❌)
-- Execution timing
-- Pass/fail summary
-- Artifact locations
-
-## Advanced Features
-
-### Custom MCP Server
-
-```bash
-# Use custom MCP server command
-npm run run-test -- --file tests/TC01.json --mcp "node custom-mcp-server.js"
-```
-
-### Environment Configuration
-
-Create `config/env.json` for environment-specific settings:
+Example shape:
 
 ```json
 {
-  "baseUrl": "https://staging.example.com",
-  "timeout": 30000,
-  "headless": false
+  "name": "Sample Tagged Suite",
+  "testcases": [
+    {
+      "id": "heroku-checkbox",
+      "file": "tests/Hiroku1.json",
+      "tags": ["smoke", "heroku"]
+    }
+  ]
 }
 ```
 
-### Parallel Execution
+Run the suite:
 
-The framework supports sequential execution. For parallel runs, use multiple terminal sessions or CI/CD pipelines.
+```bash
+npm run run-suite -- --suite config/TestMetaData.json
+```
 
-### Integration with CI/CD
+Run only one tag group:
 
-Example GitHub Actions workflow:
+```bash
+npm run run-suite -- --suite config/TestMetaData.json --tags smoke
+```
 
-```yaml
-name: Automated Tests
-on: [push, pull_request]
+Run in parallel:
 
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-      - run: npm install
-      - run: npm run discover-locators -- --file tests/TC01.json
-      - run: npm run run-test -- --file tests/TC01.json
+```bash
+npm run run-suite -- --suite config/TestMetaData.json --workers 3
+```
+
+When `--workers` is greater than `1`, self-heal is disabled automatically to prevent concurrent updates to `config/selectors.json`.
+
+## Viewing Reports and Artifacts
+
+Each execution creates an artifact directory such as `artifacts/<execution-id>/`.
+
+Typical outputs:
+
+- `execution.log`
+- `report-email.html`
+- `report-email.txt`
+- screenshot PNG files when screenshot steps are used
+
+The current GUI does not provide an Artifacts tab, so inspect these files directly in the artifact folder.
+
+## Advanced Features
+
+### Self-Heal
+
+Single-flow execution enables self-heal by default. When an element action fails, the framework can snapshot the page, attempt a replacement selector, persist it, and retry the action once.
+
+### Parallel Suite Runs
+
+Parallelism is controlled by `--workers`. Each testcase gets its own MCP client process and artifact subdirectory.
+
+### Custom MCP Command
+
+Override the default server command when needed:
+
+```bash
+npm run run-test -- --file tests/sample.json --mcp "node custom-mcp-server.js"
 ```
 
 ## Troubleshooting
 
-### Common Issues
+### Missing Placeholder Data
 
-#### 1. MCP Server Connection Failed
-```
-Error: Failed to connect to MCP server
-```
-**Solution:**
-- Ensure Playwright MCP server is installed: `npm install -g @executeautomation/playwright-mcp-server`
-- Check if the server is running
-- Verify Node.js version compatibility
+If execution fails with a missing placeholder message, supply the required keys through layered `config/TestData/*.json` files or the scenario file passed with `--data`.
 
-#### 2. Locator Discovery Fails
-```
-Error: Cannot read properties of undefined (reading 'snapshot')
-```
-**Solution:**
-- The framework will automatically use fallback discovery
-- Manually add selectors to `config/selectors.json`
-- Check page load timing
+### Element Not Found
 
-#### 3. Element Not Found
-```
-Error: page.click: Timeout 30000ms exceeded
-```
-**Solution:**
-- Run locator discovery again
-- Verify selectors in `config/selectors.json`
-- Check if page structure changed
-- Add wait steps before interactions
+1. Run `discover-locators` again.
+2. Check `config/selectors.json`.
+3. Add an explicit `wait`, `waitFor`, or `waitForSelector` step before the interaction.
 
-#### 4. JSON Validation Errors
-```
-ZodError: Expected string, received null
-```
-**Solution:**
-- Ensure optional fields are omitted, not set to `null`
-- Validate JSON against the schema
-- Check for syntax errors
+### Parallel Run Caveat
 
-### Debug Mode
+If you need selector healing, keep `--workers 1`. Parallel runs trade healing for file-write safety.
 
-Enable detailed logging:
+### Logs and Reports
 
-```bash
-DEBUG=* npm run run-test -- --file tests/TC01.json
-```
+Use `artifacts/<runId>/execution.log` for the detailed step trace and `artifacts/<runId>/report-email.html` for the summary report.
 
-### Performance Optimization
+## Quick Start
 
-1. **Selector Optimization**: Use specific selectors (IDs, data attributes)
-2. **Wait Strategies**: Add appropriate wait steps
-3. **Screenshot Reduction**: Only capture screenshots when necessary
+1. Install and build: `npm install && npm run build`
+2. Create or copy a JSON flow under `tests/`
+3. Resolve data placeholders with `config/TestData/*.json`
+4. Run locator discovery: `npm run discover-locators -- --file tests/MyFlow.json`
+5. Execute the flow: `npm run run-test -- --file tests/MyFlow.json ...`
+6. Review `artifacts/<runId>/`
 
-### Getting Help
-
-1. Check execution logs in artifacts directory
-2. Review MCP server logs
-3. Validate test JSON against schema
-4. Test selectors manually in browser dev tools
-
----
-
-## Quick Start Guide
-
-1. **Setup**: `npm install && npm install -g @executeautomation/playwright-mcp-server`
-2. **Create Test**: Write English steps in `tests/Test_English/TC01.txt`
-3. **Convert**: Framework auto-converts to `tests/TC01.json`
-4. **Discover**: `npm run discover-locators -- --file tests/TC01.json`
-5. **Run**: `npm run run-test -- --file tests/TC01.json`
-6. **Report**: Check artifacts directory for logs and screenshots
-
-This handbook provides comprehensive guidance for using the Playwright MCP Automation Framework effectively.
+This handbook reflects the current codebase behavior as of April 2026.
