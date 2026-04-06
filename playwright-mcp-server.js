@@ -66,6 +66,18 @@ class PlaywrightMCPServer {
             },
           },
           {
+            name: "mcp_microsoft_pla_browser_select_option",
+            description: "Select an option from a dropdown",
+            inputSchema: {
+              type: "object",
+              properties: {
+                ref: { type: "string" },
+                values: { type: "array", items: { type: "string" } },
+              },
+              required: ["ref", "values"],
+            },
+          },
+          {
             name: "mcp_microsoft_pla_browser_press_key",
             description: "Press a keyboard key",
             inputSchema: {
@@ -114,6 +126,132 @@ class PlaywrightMCPServer {
             inputSchema: {
               type: "object",
               properties: {},
+            },
+          },
+          {
+            name: "mcp_microsoft_pla_browser_reload",
+            description: "Reload current page",
+            inputSchema: {
+              type: "object",
+              properties: {},
+            },
+          },
+          {
+            name: "mcp_microsoft_pla_browser_get_value",
+            description: "Get value or text from element",
+            inputSchema: {
+              type: "object",
+              properties: {
+                ref: { type: "string" },
+              },
+              required: ["ref"],
+            },
+          },
+          {
+            name: "mcp_microsoft_pla_browser_clear_text",
+            description: "Clear text of input element",
+            inputSchema: {
+              type: "object",
+              properties: {
+                ref: { type: "string" },
+              },
+              required: ["ref"],
+            },
+          },
+          {
+            name: "mcp_microsoft_pla_browser_is_visible",
+            description: "Check if element is visible",
+            inputSchema: {
+              type: "object",
+              properties: {
+                ref: { type: "string" },
+              },
+              required: ["ref"],
+            },
+          },
+          {
+            name: "mcp_microsoft_pla_browser_element_exists",
+            description: "Check if element exists",
+            inputSchema: {
+              type: "object",
+              properties: {
+                ref: { type: "string" },
+              },
+              required: ["ref"],
+            },
+          },
+          {
+            name: "mcp_microsoft_pla_browser_scroll",
+            description: "Scroll page",
+            inputSchema: {
+              type: "object",
+              properties: {
+                count: { type: "number" },
+              },
+            },
+          },
+          {
+            name: "mcp_microsoft_pla_browser_focus_then_downarrow",
+            description: "Focus and press ArrowDown",
+            inputSchema: {
+              type: "object",
+              properties: {
+                ref: { type: "string" },
+              },
+              required: ["ref"],
+            },
+          },
+          {
+            name: "mcp_microsoft_pla_browser_send_downarrow_tab",
+            description: "Focus and press ArrowDown + Tab",
+            inputSchema: {
+              type: "object",
+              properties: {
+                ref: { type: "string" },
+              },
+              required: ["ref"],
+            },
+          },
+          {
+            name: "mcp_microsoft_pla_browser_select_by_index",
+            description: "Select dropdown option by index",
+            inputSchema: {
+              type: "object",
+              properties: {
+                ref: { type: "string" },
+                index: { type: "number" },
+              },
+              required: ["ref", "index"],
+            },
+          },
+          {
+            name: "mcp_microsoft_pla_browser_get_all_tabs",
+            description: "Get all open tabs",
+            inputSchema: {
+              type: "object",
+              properties: {},
+            },
+          },
+          {
+            name: "mcp_microsoft_pla_browser_switch_tab",
+            description: "Switch to tab index",
+            inputSchema: {
+              type: "object",
+              properties: {
+                index: { type: "number" },
+              },
+              required: ["index"],
+            },
+          },
+          {
+            name: "mcp_microsoft_pla_browser_wait_new_tab",
+            description: "Wait for a new tab/window",
+            inputSchema: {
+              type: "object",
+              properties: {
+                initialCount: { type: "number" },
+                timeout: { type: "number" },
+              },
             },
           },
         ],
@@ -178,6 +316,20 @@ class PlaywrightMCPServer {
             }
             return {
               content: [{ type: "text", text: `Waited for ${args.text || `${args.time}s`}` }],
+            };
+
+          case "mcp_microsoft_pla_browser_select_option":
+            await this.ensureBrowser();
+            if (!this.page) {
+              throw new Error("Page not available for selectOption");
+            }
+            if (!Array.isArray(args.values) || args.values.length === 0) {
+              throw new Error("select_option requires values array");
+            }
+            const label = args.values[0];
+            await this.page.selectOption(args.ref, { label });
+            return {
+              content: [{ type: "text", text: `Selected option '${label}' on ${args.ref}` }],
             };
 
           case "mcp_microsoft_pla_browser_take_screenshot":
@@ -255,6 +407,163 @@ class PlaywrightMCPServer {
             return {
               content: [{ type: "text", text: "Browser closed" }],
             };
+
+          case "mcp_microsoft_pla_browser_reload":
+            await this.ensureBrowser();
+            if (!this.page) {
+              throw new Error("Page not available for reload");
+            }
+            await this.page.reload();
+            return {
+              content: [{ type: "text", text: "Page reloaded" }],
+            };
+
+          case "mcp_microsoft_pla_browser_get_value":
+            await this.ensureBrowser();
+            if (!this.page) {
+              throw new Error("Page not available for get value");
+            }
+            const valueHandle = await this.page.$(args.ref);
+            if (!valueHandle) {
+              return { content: [{ type: "text", text: "" }] };
+            }
+            const inputValue = await valueHandle.evaluate((el) => {
+              if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement || el instanceof HTMLSelectElement) {
+                return el.value;
+              }
+              return el.textContent || "";
+            });
+            return {
+              content: [{ type: "text", text: String(inputValue) }],
+            };
+
+          case "mcp_microsoft_pla_browser_clear_text":
+            await this.ensureBrowser();
+            if (!this.page) {
+              throw new Error("Page not available for clear text");
+            }
+            await this.page.fill(args.ref, "");
+            return {
+              content: [{ type: "text", text: `Cleared text in ${args.ref}` }],
+            };
+
+          case "mcp_microsoft_pla_browser_is_visible":
+            await this.ensureBrowser();
+            if (!this.page) {
+              throw new Error("Page not available for is_visible");
+            }
+            const visible = await this.page.isVisible(args.ref);
+            return {
+              content: [{ type: "text", text: String(visible) }],
+            };
+
+          case "mcp_microsoft_pla_browser_element_exists":
+            await this.ensureBrowser();
+            if (!this.page) {
+              throw new Error("Page not available for element_exists");
+            }
+            const element = await this.page.$(args.ref);
+            return {
+              content: [{ type: "text", text: String(Boolean(element)) }],
+            };
+
+          case "mcp_microsoft_pla_browser_scroll":
+            await this.ensureBrowser();
+            if (!this.page) {
+              throw new Error("Page not available for scroll");
+            }
+            const count = typeof args.count === "number" ? args.count : 1;
+            await this.page.evaluate((scrollCount) => {
+              window.scrollBy(0, window.innerHeight * scrollCount);
+            }, count);
+            return {
+              content: [{ type: "text", text: `Scrolled ${count} page(s)` }],
+            };
+
+          case "mcp_microsoft_pla_browser_focus_then_downarrow":
+            await this.ensureBrowser();
+            if (!this.page) {
+              throw new Error("Page not available for focus_then_downarrow");
+            }
+            await this.page.focus(args.ref);
+            await this.page.keyboard.press("ArrowDown");
+            return {
+              content: [{ type: "text", text: `Focused ${args.ref} and pressed ArrowDown` }],
+            };
+
+          case "mcp_microsoft_pla_browser_send_downarrow_tab":
+            await this.ensureBrowser();
+            if (!this.page) {
+              throw new Error("Page not available for send_downarrow_tab");
+            }
+            await this.page.focus(args.ref);
+            await this.page.keyboard.press("ArrowDown");
+            await this.page.keyboard.press("Tab");
+            return {
+              content: [{ type: "text", text: `Focused ${args.ref} and pressed ArrowDown + Tab` }],
+            };
+
+          case "mcp_microsoft_pla_browser_select_by_index":
+            await this.ensureBrowser();
+            if (!this.page) {
+              throw new Error("Page not available for select_by_index");
+            }
+            await this.page.selectOption(args.ref, { index: args.index });
+            return {
+              content: [{ type: "text", text: `Selected index ${args.index} for ${args.ref}` }],
+            };
+
+          case "mcp_microsoft_pla_browser_get_all_tabs":
+            await this.ensureBrowser();
+            if (!this.browser) {
+              throw new Error("Browser not available for get_all_tabs");
+            }
+            const pages = this.browser.contexts().flatMap((ctx) => ctx.pages());
+            const tabs = await Promise.all(
+              pages.map(async (page, idx) => ({
+                index: idx,
+                url: page.url(),
+                title: await page.title(),
+                isCurrent: page === this.page,
+              }))
+            );
+            return {
+              content: [{ type: "text", text: JSON.stringify(tabs) }],
+            };
+
+          case "mcp_microsoft_pla_browser_switch_tab":
+            await this.ensureBrowser();
+            if (!this.browser) {
+              throw new Error("Browser not available for switch_tab");
+            }
+            const allPages = this.browser.contexts().flatMap((ctx) => ctx.pages());
+            if (args.index < 0 || args.index >= allPages.length) {
+              throw new Error(`Invalid tab index ${args.index}`);
+            }
+            this.page = allPages[args.index];
+            return {
+              content: [{ type: "text", text: `Switched to tab ${args.index}` }],
+            };
+
+          case "mcp_microsoft_pla_browser_wait_new_tab":
+            await this.ensureBrowser();
+            if (!this.browser) {
+              throw new Error("Browser not available for wait_new_tab");
+            }
+            const initial = typeof args.initialCount === "number" ? args.initialCount : this.browser.contexts().flatMap((ctx) => ctx.pages()).length;
+            const timeoutMs = (typeof args.timeout === "number" ? args.timeout : 10) * 1000;
+            const start = Date.now();
+            let currentCount = initial;
+            while (Date.now() - start < timeoutMs) {
+              currentCount = this.browser.contexts().flatMap((ctx) => ctx.pages()).length;
+              if (currentCount > initial) {
+                return {
+                  content: [{ type: "text", text: String(currentCount) }],
+                };
+              }
+              await new Promise((resolve) => setTimeout(resolve, 500));
+            }
+            throw new Error(`No new tab appeared after ${timeoutMs}ms`);
 
           default:
             throw new Error(`Unknown tool: ${name}`);
