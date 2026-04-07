@@ -10,6 +10,7 @@ This framework bridges the gap between AI-generated test specifications (JSON) a
 
 - **JSON-Based Test Steps**: Tests defined as JSON arrays for easy AI generation and human readability
 - **MCP Integration**: Communicates with Playwright MCP server via stdio transport
+- **Planner Upstream Workflow**: Optional `playwright-test-planner` agent for exploratory plan creation before JSON conversion
 - **Type Safety**: Full TypeScript implementation with Zod schema validation
 - **Selector Resolution**: Configurable element locators via `selectors.json`
 - **Runtime Self-Heal**: Automatically retries stale selectors during single-flow execution
@@ -45,6 +46,14 @@ automation-framework/
 ```
 
 ## 🚀 Quick Start
+
+### Agent Workflow (Recommended)
+
+Use the repository agent pipeline for new scenarios:
+
+1. `playwright-test-planner` creates a markdown test plan under `specs/`.
+2. `Converter agent` converts the plan into framework JSON/data/locator/metadata artifacts.
+3. `Executor` runs generated tests with `npm run run-test` or `npm run run-suite`.
 
 ### 1. Installation
 

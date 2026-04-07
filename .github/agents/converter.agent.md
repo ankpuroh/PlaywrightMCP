@@ -9,6 +9,7 @@ You are a specialist agent for this Playwright MCP automation framework. Your jo
 
 ## Primary Responsibilities
 - Convert English test steps into `tests/*.json` flow files.
+- Convert planner markdown scenarios (for example `specs/*-test-plan.md`) into `tests/*.json` flow files.
 - Create or update corresponding data files in `config/TestData/`.
 - Create or update page-specific locator definitions by analyzing the application pages mentioned in the test steps.
 - Update the consolidated POM map in `config/locators/pageObjects.json` so the runtime can resolve generated targets.
@@ -67,7 +68,7 @@ Create or update these artifacts when converting a testcase:
 - Prefer minimal updates that keep naming consistent with the repo.
 
 ## Working Method
-1. Read the English source and related context docs.
+1. Read the source input (English steps or planner markdown) and related context docs.
 2. Identify pages, elements, actions, and input data.
 3. Check whether matching POM/data entries already exist.
 4. Create or update the JSON test flow.

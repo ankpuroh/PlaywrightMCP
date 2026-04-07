@@ -92,6 +92,16 @@ Recommended starting files:
 
 Plain-English files can still live under `tests/Test_English/`, but this repository does not expose a standalone conversion CLI. Conversion is typically handled through the repository's Converter agent workflow or by manual JSON authoring.
 
+### Planner as Upstream Design Input
+
+Use this pipeline when you need exploratory design before JSON authoring:
+
+1. `playwright-test-planner` explores the site and saves a markdown plan in `specs/`.
+2. `Converter agent` converts the plan into runnable framework artifacts (`tests/*.json`, layered `config/TestData/*`, locator/POM updates, and `config/TestMetaData.json`).
+3. `Executor` runs the produced JSON via `run-test` or `run-suite`.
+
+This keeps planning and execution concerns separate while preserving the framework's JSON-first runtime.
+
 ## JSON Step Format
 
 Each test file is an array of steps.

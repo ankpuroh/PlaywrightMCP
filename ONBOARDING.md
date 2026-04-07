@@ -72,11 +72,23 @@ The current GUI does not edit test flow files. It is intended for metadata and l
 2. Rename it to your scenario, for example `tests/MyFeature.json`.
 3. Edit the JSON steps directly in the file.
 
-### Option B — Use the Converter agent
+### Option B — Use the Planner + Converter agent pipeline
 
-If your starting point is plain-English test steps, use the repository's Converter agent to generate the JSON flow and related locator/POM entries.
+If your starting point is exploratory testing or high-level scenarios:
 
-### Option C — Copy and edit `tests/seed.json`
+1. Use `playwright-test-planner` to explore the app and save a plan markdown file under `specs/`.
+2. Run `Converter agent` against that plan (or plain-English steps) to generate framework artifacts:
+  - `tests/*.json`
+  - `config/TestData/*.json`
+  - `config/locators/*.json` + consolidated `config/locators/pageObjects.json`
+  - `config/TestMetaData.json`
+3. Execute the generated JSON with `npm run run-test` or `npm run run-suite`.
+
+### Option C — Use the Converter agent directly
+
+If your starting point is already plain-English test steps, use the repository's Converter agent to generate the JSON flow and related locator/POM entries.
+
+### Option D — Copy and edit `tests/seed.json`
 
 `tests/seed.json` is a ready-made template covering the most common actions:
 
