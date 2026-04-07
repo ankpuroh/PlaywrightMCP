@@ -26,6 +26,7 @@ You are a specialist agent for this Playwright MCP automation framework. Your jo
 - Preserve the original English step in `metadata.originalEnglish`.
 - Reuse existing page names, element names, placeholders, and selectors when already present.
 - Prefer stable locator attributes in POM entries (for example `data-testid`, `name`, `aria-label`) before brittle text/XPath-only strategies.
+- For dropdown selection steps, always convert into exactly two actions: first `click` on the dropdown trigger element, then `click` on the desired option element. Do not generate `select`, `select_option`, or index-based dropdown actions from English steps because many apps use custom Angular-style dropdown widgets instead of native `<select>` controls.
 - If a page-specific locator file is created or updated for maintainability, also merge those entries into `config/locators/pageObjects.json` because the runtime consumes that consolidated file.
 - For every new testcase JSON created from English steps, add a corresponding testcase object in `config/TestMetaData.json` with at least: `id`, `file`, `tags`, `dataCommon`, `dataDomain`, and `data`.
 - Metadata entry IDs must be stable lowercase kebab-case and tags must include at least one `feature-*` tag.

@@ -243,7 +243,12 @@ export class StepExecutor {
         case "scroll_page":
           {
             const count = step.value ? Number(step.value) : 1;
-            await this.client.scroll(count);
+            // If target is provided, resolve and use it; otherwise just scroll page
+            if (step.target && step.target.trim()) {
+              await this.withHeal(step.target, (sel) => this.client.scroll(count));
+            } else {
+              await this.client.scroll(count);
+            }
             result = `Scrolled ${count} page(s)`;
           }
           break;
@@ -371,16 +376,19 @@ export class StepExecutor {
           break;
 
         case "assertVisible":
-          const visibleSnapshot = await this.client.getSnapshot();
-          const visibleSnapshotText = JSON.stringify(visibleSnapshot);
-          const expectedElement = step.target;
-
-          if (!visibleSnapshotText.includes(expectedElement)) {
-            throw new Error(
-              `Assertion failed: element "${expectedElement}" not visible on page`
-            );
+          {
+            // Resolve target to actual selector and check visibility using MCP tool
+            const resolvedSelector = this.resolveSelector(step.target);
+            const visibilityResult = await this.withHeal(step.target, (sel) => this.client.isVisible(sel));
+            const isVisible = this.extractBoolean(visibilityResult);
+            
+            if (!isVisible) {
+              throw new Error(
+                `Assertion failed: element "${step.target}" not visible on page`
+              );
+            }
+            result = `Assertion passed: element "${step.target}" is visible`;
           }
-          result = `Assertion passed: element "${expectedElement}" is visible`;
           break;
 
         default:

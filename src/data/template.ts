@@ -80,3 +80,29 @@ export function applyDataTemplateToFlow(
 ): TestFlow {
   return flow.map((step) => applyDataTemplateToStep(step, data, options));
 }
+
+export function applyDataTemplateToSelectors(
+  selectors: Record<string, string>,
+  data: Record<string, unknown>,
+  options: DataTemplateOptions = {}
+): Record<string, string> {
+  const templated: Record<string, string> = {};
+  const missingByKey: Record<string, string[]> = {};
+
+  for (const [key, selector] of Object.entries(selectors)) {
+    const result = interpolateValue(selector, data);
+    templated[key] = result.value;
+    if (result.missingKeys.length > 0) {
+      missingByKey[key] = result.missingKeys;
+    }
+  }
+
+  if (options.strictMissing && Object.keys(missingByKey).length > 0) {
+    const details = Object.entries(missingByKey)
+      .map(([key, missing]) => `${key}: ${missing.join(", ")}`)
+      .join("; ");
+    throw new Error(`Missing data placeholders in selector map: ${details}`);
+  }
+
+  return templated;
+}

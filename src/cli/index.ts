@@ -20,6 +20,7 @@ import { flattenPageObjectsToSelectors } from "../pom/pageObjectModel";
 import { generateEmailReport } from "../reporting/emailReport";
 import { validateSuite } from "../suite/suiteSchema";
 import { resolveLayeredTestData } from "../data/resolver";
+import { applyDataTemplateToSelectors } from "../data/template";
 
 type ExecutionOptions = {
   file: string;
@@ -89,6 +90,10 @@ async function executeSingleFlow(options: ExecutionOptions): Promise<{
     resolvedKeys: Object.keys(layeredData.data),
   });
 
+  const runtimeSelectors = applyDataTemplateToSelectors(mergedSelectors, layeredData.data, {
+    strictMissing: options.strictData,
+  });
+
   const client = new PlaywrightMCPClient(logger, options.mcpCommand);
 
   try {
@@ -108,7 +113,7 @@ async function executeSingleFlow(options: ExecutionOptions): Promise<{
       logger.info("Self-heal mode enabled: stale locators will be automatically healed");
     }
 
-    const executor = new StepExecutor(client, logger, mergedSelectors, options.artifactDir, {
+    const executor = new StepExecutor(client, logger, runtimeSelectors, options.artifactDir, {
       locatorDiscovery,
       selfHeal,
     });
