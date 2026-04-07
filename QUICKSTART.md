@@ -16,14 +16,9 @@ npm run build
 
 ## 🎮 Running Your First Test (2 minutes)
 
-### Terminal 1 - Start MCP Server
-```bash
-playwright-mcp
-```
+The framework starts the bundled MCP server automatically (`node playwright-mcp-server.js`).
 
-Wait for: `Server ready on stdio`
-
-### Terminal 2 - Run Test
+### Run Test
 ```bash
 npm run run-test -- --file tests/sample.json
 ```
@@ -257,7 +252,9 @@ See `tests/sample.json`
 ```
 ✗ Error: Failed to connect to MCP server
 
-Solution: Make sure playwright-mcp is running in another terminal
+Solution:
+1. By default, no separate terminal is required; CLI starts bundled MCP server automatically.
+2. If `--mcp` was provided, verify the custom command is valid.
 ```
 
 ### "Element not found"

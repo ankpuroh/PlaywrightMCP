@@ -82,7 +82,7 @@ press         → client.pressKey()
 waitFor       → client.waitFor()
 screenshot    → client.screenshot()
 assertText    → getSnapshot() + text search
-assertVisible → getSnapshot() + element search
+assertVisible → client.isVisible() + boolean assertion
 ```
 
 **Error Handling**: Each step failure is logged but doesn't stop subsequent steps.

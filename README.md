@@ -167,18 +167,40 @@ Each test flow is an array of steps following this schema:
 
 ### Supported Actions
 
-| Action | Description | Example |
-|--------|-------------|---------|
-| `navigate` | Navigate to URL | `{ "action": "navigate", "target": "https://example.com" }` |
-| `click` | Click element | `{ "action": "click", "target": "submitButton" }` |
-| `fill` | Type text into field | `{ "action": "fill", "target": "usernameField", "value": "admin" }` |
-| `press` | Press keyboard key | `{ "action": "press", "value": "Enter" }` |
-| `wait` | Wait for a fixed number of seconds | `{ "action": "wait", "target": "2", "time": 2 }` |
-| `waitFor` | Wait for text/time | `{ "action": "waitFor", "target": "Loading complete" }` |
-| `waitForSelector` | Wait until an element exists | `{ "action": "waitForSelector", "target": "loginButton", "time": 30 }` |
-| `screenshot` | Capture screen | `{ "action": "screenshot", "target": "page" }` |
-| `assertText` | Verify text presence | `{ "action": "assertText", "assert": "Success" }` |
-| `assertVisible` | Verify element visible | `{ "action": "assertVisible", "target": "welcomeMessage" }` |
+The framework supports the full action set defined in `src/schema/stepSchema.ts`.
+
+| Action | Description |
+|--------|-------------|
+| `navigate` | Navigate to URL |
+| `click` | Click element |
+| `fill` | Type text into field |
+| `press` | Press keyboard key |
+| `waitFor` | Wait for text/time |
+| `assertText` | Verify text presence in snapshot |
+| `assertVisible` | Verify element visibility via MCP visibility check |
+| `screenshot` | Capture screen |
+| `select` | Select dropdown option (with click fallback) |
+| `waitForSelector` | Wait until an element exists |
+| `wait` | Wait a fixed number of seconds |
+| `reload_window` | Reload current page |
+| `quit` | Close browser |
+| `get_value` | Read input value |
+| `clear_text` | Clear input field |
+| `assert_value` | Assert input value |
+| `is_element_visible` | Return visibility status |
+| `element_exists` | Return existence status |
+| `scroll_page` | Scroll page |
+| `focus_then_downarrow` | Focus then press ArrowDown |
+| `send_downarrow_then_tab` | Focus then ArrowDown and Tab |
+| `select_dropdown_by_index` | Select option by index |
+| `mat_select_by_value` | Material-style select by value |
+| `mat_scroll_to_value` | Material-style scroll/select by value |
+| `click_n_switch_tab` | Click and switch tab |
+| `switch_to_tab` | Switch to tab index |
+| `wait_for_new_tab` | Wait for new tab |
+| `switch_to_latest_tab` | Switch to latest tab |
+| `click_and_switch_to_new_tab` | Click and switch to newest tab |
+| `get_all_tabs_info` | Return all tab info |
 
 ## 🔧 Configuration
 
@@ -303,7 +325,7 @@ The framework maps JSON actions to Playwright MCP tools:
 | waitFor | `mcp_microsoft_pla_browser_wait_for` | `{ text?, time? }` |
 | screenshot | `mcp_microsoft_pla_browser_take_screenshot` | `{ type, fullPage?, filename? }` |
 | assertText | `mcp_microsoft_pla_browser_snapshot` | `{}` |
-| assertVisible | `mcp_microsoft_pla_browser_snapshot` | `{}` |
+| assertVisible | `mcp_microsoft_pla_browser_is_visible` | `{ ref }` |
 
 ### MCPClient Methods
 
@@ -387,8 +409,17 @@ npm run run-test -- --file <path> [options]
 **Options:**
 - `--file, -f` (required): Path to JSON test file
 - `--selectors, -s`: Path to selectors.json (default: `./config/selectors.json`)
+- `--pom, -p`: Path to pageObjects.json (default: `./config/locators/pageObjects.json`)
+- `--data, -d`: Scenario-level data file path
+- `--dataCommon`: Common/base data file path
+- `--dataDomain`: Comma-separated domain data file paths
+- `--dataset`: Dataset key for structured data files
+- `--datasetCommon`: Dataset key override for common layer
+- `--datasetDomain`: Dataset key override for domain layer(s)
+- `--strictData`: Fail on missing placeholders (default: `true`)
+- `--selfHeal`: Runtime locator self-heal (default: `true`)
 - `--output, -o`: Output directory for artifacts/logs
-- `--mcp, -m`: MCP server command (default: `playwright-mcp`)
+- `--mcp, -m`: MCP server command (default: `node playwright-mcp-server.js`)
 - `--help, -h`: Show help
 - `--version, -v`: Show version
 
@@ -430,7 +461,7 @@ The `StepExecutor` class handles individual step execution:
 2. **Action Mapping**: Routes to appropriate MCP tool call
 3. **Error Handling**: Captures exceptions with context
 4. **Screenshot Capture**: Saves screenshots with step IDs and timestamps
-5. **Assertions**: Validates page state via snapshot analysis
+5. **Assertions**: Uses snapshot-based text checks and selector-based visibility checks
 
 ## 📈 Error Handling
 
@@ -455,7 +486,7 @@ The framework gracefully handles errors:
 ### MCP Server Not Connecting
 ```
 ✗ Error: Failed to connect to MCP server
-Solution: Ensure playwright-mcp is running in a separate terminal
+Solution: By default, the CLI starts `node playwright-mcp-server.js` automatically. If you override `--mcp`, verify that custom command is valid.
 ```
 
 ### Selector Not Found
@@ -526,10 +557,9 @@ For selectors, use these logical names: usernameField, passwordField, submitButt
 
 1. Install dependencies: `npm install`
 2. Build TypeScript: `npm run build`
-3. Start Playwright MCP server
-4. Run sample test: `npm run run-test -- --file tests/sample.json`
-5. Create your own test JSON files
-6. Integrate with CI/CD pipeline
+3. Run sample test: `npm run run-test -- --file tests/sample.json`
+4. Create your own test JSON files
+5. Integrate with CI/CD pipeline
 
 ---
 

@@ -11,7 +11,7 @@ The framework uses Model Context Protocol (MCP) to communicate between a Node.js
 ### 1. Command Initiation (`package.json` and `src/cli/index.ts`)
 
 - **User Command**: `npm run run-test -- --file tests/Hirolu3.json`
-- **Package.json Script**: `"run-test": "ts-node src/cli/index.ts run-test"`
+- **Package.json Script**: `"run-test": "ts-node src/cli/index.ts run-json"`
 - **Entry Point**: `src/cli/index.ts`
   - Parses command-line arguments using `yargs`.
   - Extracts the test file path (e.g., `tests/Hirolu3.json`).
@@ -65,7 +65,8 @@ The framework uses Model Context Protocol (MCP) to communicate between a Node.js
   - `select`: Resolves selector, calls `client.selectOption(selector, [value])` with fallback.
   - `waitFor`: Calls `client.waitFor(text?, time?)`.
   - `screenshot`: Calls `client.screenshot(path, false)`.
-  - `assertText/assertVisible`: Gets snapshot, checks content.
+  - `assertText`: Gets snapshot and checks text content.
+  - `assertVisible`: Calls visibility tool using resolved selector and asserts boolean result.
 - **MCP Client Methods** (`mcpClient.ts`):
   - Each method calls `callTool()` with specific MCP tool name and arguments.
   - Tools: `mcp_microsoft_pla_browser_navigate`, `click`, `type`, `select_option`, etc.

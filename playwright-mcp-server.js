@@ -579,7 +579,11 @@ class PlaywrightMCPServer {
 
   async ensureBrowser() {
     if (!this.browser) {
-      this.browser = await chromium.launch({ headless: false });
+      const executablePath = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe";
+      this.browser = await chromium.launch({
+        headless: false,
+        executablePath: executablePath || undefined,
+      });
     }
     if (!this.page) {
       this.page = await this.browser.newPage();

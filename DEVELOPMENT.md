@@ -17,12 +17,11 @@ npm install
 # Build TypeScript
 npm run build
 
-# Start Playwright MCP server (in separate terminal)
-playwright-mcp
-
 # Run tests
 npm run run-test -- --file tests/sample.json
 ```
+
+Note: `run-test` starts the bundled MCP server automatically (`node playwright-mcp-server.js`) unless overridden with `--mcp`.
 
 ## Adding New Actions
 
@@ -406,7 +405,6 @@ jobs:
           node-version: 18
       - run: npm install
       - run: npm run build
-      - run: playwright-mcp &
       - run: npm run run-test -- --file tests/sample.json
 ```
 

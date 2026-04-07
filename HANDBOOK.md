@@ -134,7 +134,7 @@ Each test file is an array of steps.
 | `select` | Select option(s) from dropdown |
 | `screenshot` | Save a screenshot into the artifact directory |
 | `assertText` | Assert text is present in the page snapshot |
-| `assertVisible` | Assert a target is visible in the page snapshot |
+| `assertVisible` | Assert a target is visible using selector-based visibility check |
 
 Additional advanced actions are defined in `src/schema/stepSchema.ts`.
 

@@ -107,7 +107,7 @@ Test files are JSON arrays with step objects:
 - `fill` - Fill input field with text
 - `click` - Click on element
 - `waitFor` - Wait for time or condition
-- `pressKey` - Press keyboard key
+- `press` - Press keyboard key
 
 ## Converting Text Test Cases to JSON
 
