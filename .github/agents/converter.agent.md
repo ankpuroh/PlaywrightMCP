@@ -25,7 +25,13 @@ You are a specialist agent for this Playwright MCP automation framework. Your jo
 - If the URL is test-specific or environment-specific, prefer a placeholder for navigation targets too.
 - Preserve the original English step in `metadata.originalEnglish`.
 - Reuse existing page names, element names, placeholders, and selectors when already present.
-- Prefer stable locator attributes in POM entries (for example `data-testid`, `name`, `aria-label`) before brittle text/XPath-only strategies.
+- **Prefer XPath over CSS selectors** when writing locator values in POM entries. Use CSS only as a last resort when no suitable XPath expression is practical.
+- XPath preference order:
+  1. Attribute-based XPath: `//*[@data-testid='x']`, `//*[@name='x']`, `//*[@id='x']`
+  2. ARIA/role-based XPath: `//*[@aria-label='x']`, `//*[@role='button' and normalize-space()='x']`
+  3. Text-based XPath: `//button[normalize-space()='Submit']`, `//a[contains(text(),'Login')]`
+  4. Combined predicates: `//div[@class='footer']//a[normalize-space()='PRIVACY']`
+  5. CSS selectors (fallback only): `[data-testid='x']`, `input[name='x']`
 - For dropdown selection steps, always convert into exactly two actions: first `click` on the dropdown trigger element, then `click` on the desired option element. Do not generate `select`, `select_option`, or index-based dropdown actions from English steps because many apps use custom Angular-style dropdown widgets instead of native `<select>` controls.
 - If a page-specific locator file is created or updated for maintainability, also merge those entries into `config/locators/pageObjects.json` because the runtime consumes that consolidated file.
 - For every new testcase JSON created from English steps, add a corresponding testcase object in `config/TestMetaData.json` with at least: `id`, `file`, `tags`, `dataCommon`, `dataDomain`, and `data`.
@@ -41,6 +47,8 @@ You are a specialist agent for this Playwright MCP automation framework. Your jo
    - home pages -> `HomePage`
    - feature pages -> `FeatureNamePage`
 6. Group locators by page and create stable element names like `usernameField`, `loginButton`, `shoppingCartLink`.
+7. When authoring locator values, always attempt XPath first using the preference order defined in Required Conventions. Only fall back to CSS if the element cannot be reliably targeted with XPath.
+8. For dynamic dropdown option locators, always use XPath with a data placeholder, for example: `//li[normalize-space()={{optionTextQuoted}}]`. Add the matching quoted-value key to scenario data.
 
 ## Output Rules
 Create or update these artifacts when converting a testcase:
