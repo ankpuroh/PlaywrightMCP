@@ -82,7 +82,15 @@ export class StepExecutor {
       // Update in-memory selector so subsequent steps also benefit
       this.selectors[target] = healed;
       this.logger.info(`[self-heal] Retrying "${target}" with healed selector`, { healed });
-      return await action(healed);
+      try {
+        return await action(healed);
+      } catch (retryError) {
+        this.logger.error(`[self-heal] Retry failed for "${target}"`, {
+          healed,
+          error: retryError instanceof Error ? retryError.message : String(retryError),
+        });
+        throw firstError;
+      }
     }
   }
 
@@ -112,6 +120,44 @@ export class StepExecutor {
       throw new Error(`waitForSelector timed out for ${target}: ${lastError.message}`);
     }
     throw new Error(`waitForSelector timed out for ${target}`);
+  }
+
+  private async assertVisibleWithHeal(target: string): Promise<void> {
+    const visibilityResult = await this.withHeal(target, (sel) => this.client.isVisible(sel));
+    if (this.extractBoolean(visibilityResult)) {
+      return;
+    }
+
+    const originalError = new Error(
+      `Assertion failed: element "${target}" not visible on page`
+    );
+
+    if (!this.selfHeal || !this.locatorDiscovery) {
+      throw originalError;
+    }
+
+    this.logger.warn(`[self-heal] Visibility assertion failed for "${target}", attempting heal...`, {
+      selector: this.resolveSelector(target),
+    });
+
+    const healed = await this.locatorDiscovery.healLocator(target);
+    if (!healed) {
+      throw originalError;
+    }
+
+    this.selectors[target] = healed;
+    this.logger.info(`[self-heal] Retrying visibility assertion for "${target}" with healed selector`, {
+      healed,
+    });
+
+    try {
+      const healedVisibility = await this.client.isVisible(healed);
+      if (!this.extractBoolean(healedVisibility)) {
+        throw originalError;
+      }
+    } catch {
+      throw originalError;
+    }
   }
 
   /**
@@ -377,16 +423,7 @@ export class StepExecutor {
 
         case "assertVisible":
           {
-            // Resolve target to actual selector and check visibility using MCP tool
-            const resolvedSelector = this.resolveSelector(step.target);
-            const visibilityResult = await this.withHeal(step.target, (sel) => this.client.isVisible(sel));
-            const isVisible = this.extractBoolean(visibilityResult);
-            
-            if (!isVisible) {
-              throw new Error(
-                `Assertion failed: element "${step.target}" not visible on page`
-              );
-            }
+            await this.assertVisibleWithHeal(step.target);
             result = `Assertion passed: element "${step.target}" is visible`;
           }
           break;

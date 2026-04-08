@@ -55,6 +55,7 @@ The framework uses Model Context Protocol (MCP) to communicate between a Node.js
     - Logs step start.
     - Resolves target selector using `resolveSelector()` (from `selectors.json` or direct).
     - Calls appropriate action handler based on `step.action`.
+    - On selector failure, `withHeal()` triggers runtime self-heal.
 
 ### 6. Individual Step Execution (`src/executor/executor.ts` and `src/executor/mcpClient.ts`)
 
@@ -70,6 +71,17 @@ The framework uses Model Context Protocol (MCP) to communicate between a Node.js
 - **MCP Client Methods** (`mcpClient.ts`):
   - Each method calls `callTool()` with specific MCP tool name and arguments.
   - Tools: `mcp_microsoft_pla_browser_navigate`, `click`, `type`, `select_option`, etc.
+  - Self-heal helpers: `getDOMContent()` and `validateXPath()`.
+
+### Runtime Self-Heal Path (`src/executor/executor.ts`, `src/executor/locatorDiscovery.ts`, `src/executor/selfHealLLM.ts`)
+
+- Triggered only when an element action fails (`click`, `fill`, `select`, etc.).
+- Captures cleaned DOM from MCP (`mcp_microsoft_pla_browser_get_dom`).
+- Sends DOM + natural-language target description to configured LLM (OpenAI or Ollama local).
+- Validates generated XPath with MCP (`mcp_microsoft_pla_browser_validate_xpath`) and accepts only exactly one match.
+- Retries original action once with healed XPath.
+- On retry success, persists healed locator atomically.
+- On retry failure, throws the original action error.
 
 ### 7. MCP Server Processing (`playwright-mcp-server.js`)
 
@@ -80,6 +92,9 @@ The framework uses Model Context Protocol (MCP) to communicate between a Node.js
     - Ensures browser/page is initialized (`ensureBrowser()`).
     - Executes Playwright action: `page.click(ref)`.
     - Returns result or error.
+- Additional self-heal tools:
+  - `mcp_microsoft_pla_browser_get_dom` (clean DOM capture)
+  - `mcp_microsoft_pla_browser_validate_xpath` (XPath uniqueness check)
 - **Browser Management**: Launches Chromium, creates pages, handles snapshots.
 
 ### 8. Result Collection and Logging (`src/utils/logger.ts`)
@@ -101,6 +116,7 @@ The framework uses Model Context Protocol (MCP) to communicate between a Node.js
 - **`src/executor/mcpClient.ts`**: MCP communication, tool calls.
 - **`src/executor/executor.ts`**: Step execution logic, action handlers.
 - **`src/executor/locatorDiscovery.ts`**: Locator discovery and selector updates.
+- **`src/executor/selfHealLLM.ts`**: LLM provider integration for healing XPath generation.
 - **`playwright-mcp-server.js`**: MCP server, Playwright browser control.
 - **`config/selectors.json`**: Selector mappings.
 - **`src/utils/logger.ts`**: Logging utilities.

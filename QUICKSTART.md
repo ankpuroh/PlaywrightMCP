@@ -18,6 +18,15 @@ npm run build
 
 The framework starts the bundled MCP server automatically (`node playwright-mcp-server.js`).
 
+Optional: enable LLM-based self-heal using local Ollama (invoked only on locator failure):
+
+```bash
+ollama serve
+ollama pull llama3.1
+set OLLAMA_BASE_URL=http://127.0.0.1:11434
+set OLLAMA_MODEL=llama3.1
+```
+
 ### Run Test
 ```bash
 npm run run-test -- --file tests/sample.json
@@ -210,13 +219,15 @@ npm run run-test -- --help
 ## 🔧 Configuration Files
 
 ### selectors.json
-Maps logical names to CSS selectors:
+Maps logical names to locator expressions:
 ```json
 {
   "submitBtn": "button[type='submit']",
   "emailField": "input#email"
 }
 ```
+
+Runtime self-heal can update locator entries atomically when a better selector/XPath is discovered on failure.
 
 Use in tests:
 ```json
@@ -258,6 +269,15 @@ Solution:
 ```
 
 ### "Element not found"
+
+The framework can auto-heal a failed locator in single-test mode:
+1. capture cleaned DOM,
+2. ask configured LLM for stable XPath,
+3. validate XPath resolves to exactly one element,
+4. retry action,
+5. persist healed locator if retry succeeds.
+
+If healing also fails, the original action error is surfaced.
 ```
 ✗ Error: Element "submitBtn" not found
 

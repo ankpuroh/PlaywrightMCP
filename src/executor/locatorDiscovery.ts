@@ -5,6 +5,7 @@ import { StepExecutor } from "./executor";
 import fs from "fs-extra";
 import path from "path";
 import { TestFlow } from "../schema/stepSchema";
+import { generateXPathWithLLM } from "./selfHealLLM";
 
 export const LOCATOR_NOT_OBSERVED_MESSAGE = "Need to provide locator as locator not observed";
 
@@ -290,13 +291,36 @@ export class LocatorDiscovery {
   ): Promise<string | null> {
     this.logger.info(`[self-heal] Attempting to heal locator for "${target}"`);
 
-    const snapshot = await this.getPageSnapshot();
-    if (!snapshot) {
-      this.logger.warn(`[self-heal] No snapshot available for healing "${target}"`);
+    // 1) Capture cleaned DOM only after a failure-triggered self-heal call.
+    const dom = await this.client.getDOMContent();
+    if (!dom) {
+      this.logger.warn(`[self-heal] Empty DOM for "${target}", cannot heal`);
       return null;
     }
 
-    const snapshotText = JSON.stringify(snapshot, null, 2);
+    // 2) Ask LLM for a stable XPath using target as natural-language description.
+    const llmXPath = await generateXPathWithLLM(dom, target);
+
+    if (llmXPath) {
+      // 3) Validate XPath must resolve to exactly one element.
+      const count = await this.client.validateXPath(llmXPath);
+      if (count === 1) {
+        this.logger.success(`[self-heal] LLM healed locator for "${target}"`, {
+          healed: llmXPath,
+        });
+        await this.persistHealedLocator(target, llmXPath, selectorsPath);
+        return llmXPath;
+      }
+
+      this.logger.warn(`[self-heal] Rejected LLM XPath for "${target}"`, {
+        xpath: llmXPath,
+        matchCount: count,
+      });
+    }
+
+    // 4) Fallback heuristic using DOM text and/or snapshot, still validated.
+    const snapshot = await this.getPageSnapshot();
+    const snapshotText = snapshot ? JSON.stringify(snapshot, null, 2) : dom;
     const healed = this.findLocatorByName(target, snapshotText, snapshot);
 
     if (!healed) {
@@ -304,14 +328,86 @@ export class LocatorDiscovery {
       return null;
     }
 
+    const isXPath = healed.startsWith("/");
+    if (isXPath) {
+      const count = await this.client.validateXPath(healed);
+      if (count !== 1) {
+        this.logger.warn(`[self-heal] Rejected heuristic XPath for "${target}"`, {
+          healed,
+          matchCount: count,
+        });
+        return null;
+      }
+    }
+
     this.logger.success(`[self-heal] Healed locator for "${target}"`, { healed });
-
-    // Persist the healed selector immediately
-    const existing = await this.loadCurrentSelectors();
-    existing[target] = healed;
-    await this.saveDiscoveredLocators(existing);
-
+    await this.persistHealedLocator(target, healed, selectorsPath);
     return healed;
+  }
+
+  private async persistHealedLocator(
+    target: string,
+    selector: string,
+    selectorsPath: string = this.selectorsPath
+  ): Promise<void> {
+    const absolutePath = path.resolve(selectorsPath);
+    const ext = path.extname(absolutePath).toLowerCase();
+
+    if (ext === ".json") {
+      const existing = (await fs.pathExists(absolutePath))
+        ? await fs.readJSON(absolutePath)
+        : {};
+      existing[target] = selector;
+      const tmpPath = `${absolutePath}.tmp-${Date.now()}`;
+      await fs.ensureDir(path.dirname(absolutePath));
+      await fs.writeJSON(tmpPath, existing, { spaces: 2 });
+      await fs.move(tmpPath, absolutePath, { overwrite: true });
+      this.logger.info("[self-heal] Updated locator file", { file: absolutePath, target, selector });
+      return;
+    }
+
+    if (ext === ".properties") {
+      const content = (await fs.pathExists(absolutePath))
+        ? await fs.readFile(absolutePath, "utf8")
+        : "";
+      const escapedKey = target.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      const lineRegex = new RegExp(`^${escapedKey}\\s*=.*$`, "m");
+      const replacement = `${target}=${selector}`;
+      const updated = lineRegex.test(content)
+        ? content.replace(lineRegex, replacement)
+        : `${content}${content.endsWith("\n") || content.length === 0 ? "" : "\n"}${replacement}\n`;
+      await this.atomicWriteTextFile(absolutePath, updated);
+      this.logger.info("[self-heal] Updated locator file", { file: absolutePath, target, selector });
+      return;
+    }
+
+    if (ext === ".ts" || ext === ".js") {
+      const content = (await fs.pathExists(absolutePath))
+        ? await fs.readFile(absolutePath, "utf8")
+        : "";
+      const escapedKey = target.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      const keyRegex = new RegExp(`(["'])${escapedKey}\\1\\s*:\\s*(["'])(.*?)\\2`);
+
+      let updated = content;
+      if (keyRegex.test(content)) {
+        updated = content.replace(keyRegex, `'${target}': '${selector.replace(/'/g, "\\'")}'`);
+      } else {
+        const objectCloseIndex = content.lastIndexOf("}");
+        if (objectCloseIndex === -1) {
+          throw new Error(`Could not safely update ${absolutePath}: no object literal found`);
+        }
+        const prefix = content.slice(0, objectCloseIndex).trimEnd();
+        const suffix = content.slice(objectCloseIndex);
+        const needsComma = prefix.endsWith("{") ? "" : ",";
+        updated = `${prefix}${needsComma}\n  '${target}': '${selector.replace(/'/g, "\\'")}'\n${suffix}`;
+      }
+
+      await this.atomicWriteTextFile(absolutePath, updated);
+      this.logger.info("[self-heal] Updated locator file", { file: absolutePath, target, selector });
+      return;
+    }
+
+    throw new Error(`Unsupported locator file format for self-heal update: ${ext}`);
   }
 
   /**
@@ -342,7 +438,9 @@ export class LocatorDiscovery {
     try {
       const absolutePath = path.resolve(this.selectorsPath);
       await fs.ensureDir(path.dirname(absolutePath));
-      await fs.writeJSON(absolutePath, locators, { spaces: 2 });
+      const tmpPath = `${absolutePath}.tmp-${Date.now()}`;
+      await fs.writeJSON(tmpPath, locators, { spaces: 2 });
+      await fs.move(tmpPath, absolutePath, { overwrite: true });
       this.logger.success("Updated selectors.json with discovered locators", {
         locatorCount: Object.keys(locators).length,
       });
@@ -352,6 +450,13 @@ export class LocatorDiscovery {
       });
       throw error;
     }
+  }
+
+  private async atomicWriteTextFile(filePath: string, content: string): Promise<void> {
+    const tmpPath = `${filePath}.tmp-${Date.now()}`;
+    await fs.ensureDir(path.dirname(filePath));
+    await fs.writeFile(tmpPath, content, "utf8");
+    await fs.move(tmpPath, filePath, { overwrite: true });
   }
 
   /**

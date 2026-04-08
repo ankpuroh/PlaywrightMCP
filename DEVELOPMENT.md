@@ -23,6 +23,24 @@ npm run run-test -- --file tests/sample.json
 
 Note: `run-test` starts the bundled MCP server automatically (`node playwright-mcp-server.js`) unless overridden with `--mcp`.
 
+### Optional Local LLM for Self-Heal
+
+Self-heal LLM is invoked only on action failures.
+
+```bash
+ollama serve
+ollama pull llama3.1
+set OLLAMA_BASE_URL=http://127.0.0.1:11434
+set OLLAMA_MODEL=llama3.1
+```
+
+Implementation files:
+- `src/executor/selfHealLLM.ts` (provider integration + prompt)
+- `src/executor/locatorDiscovery.ts` (heal flow + atomic persistence)
+- `src/executor/executor.ts` (`withHeal` retry/original-error semantics)
+- `src/executor/mcpClient.ts` (`getDOMContent`, `validateXPath`)
+- `playwright-mcp-server.js` (`mcp_microsoft_pla_browser_get_dom`, `mcp_microsoft_pla_browser_validate_xpath`)
+
 ## Adding New Actions
 
 ### Step 1: Update Schema

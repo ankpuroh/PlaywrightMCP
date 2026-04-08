@@ -13,7 +13,8 @@ This framework bridges the gap between AI-generated test specifications (JSON) a
 - **Planner Upstream Workflow**: Optional `playwright-test-planner` agent for exploratory plan creation before JSON conversion
 - **Type Safety**: Full TypeScript implementation with Zod schema validation
 - **Selector Resolution**: Configurable element locators via `selectors.json`
-- **Runtime Self-Heal**: Automatically retries stale selectors during single-flow execution
+- **Runtime Self-Heal**: On failure, captures cleaned DOM, generates XPath through LLM, validates uniqueness, retries once, and persists healed locator
+- **Local LLM Option**: Supports local Ollama for offline self-healing
 - **Parallel Suite Execution**: Run tagged suites with configurable workers
 - **Rich Logging**: Comprehensive execution logs with structured output
 - **Artifact Management**: Automatic screenshot and log collection
@@ -30,6 +31,7 @@ automation-framework/
 │   ├── executor/        # Core execution engine
 │   │   ├── mcpClient.ts       (MCP server connection & tool calls)
 │   │   ├── executor.ts        (Individual step execution)
+│   │   ├── selfHealLLM.ts     (LLM provider integration for XPath healing)
 │   │   └── runner.ts          (Complete flow execution)
 │   ├── cli/             # CLI interface
 │   │   └── index.ts
@@ -90,6 +92,28 @@ npm run run-test -- \
 
 The framework starts the bundled MCP server automatically with `node playwright-mcp-server.js`. Use `--mcp` only when you want to override that command.
 
+### Self-Heal LLM Setup (Optional)
+
+Self-heal calls an LLM only when an element action fails due to missing/invalid locator.
+
+Provider priority:
+1. `OPENAI_API_KEY` (OpenAI)
+2. `OLLAMA_BASE_URL` or `OLLAMA_MODEL` (local Ollama)
+
+Example local Ollama setup:
+
+```bash
+# Start Ollama service and pull model once
+ollama serve
+ollama pull llama3.1
+
+# Optional env overrides
+set OLLAMA_BASE_URL=http://127.0.0.1:11434
+set OLLAMA_MODEL=llama3.1
+```
+
+If no provider is configured, self-heal falls back to non-LLM heuristic discovery.
+
 ### Page Object Model + Parameterized Data
 
 - `--pom` loads page object aliases (for example `SamplePage.searchInput`)
@@ -147,6 +171,8 @@ npm run run-suite -- --suite config/TestMetaData.json --workers 3
 ```
 
 When `--workers` is greater than `1`, self-heal is disabled automatically to avoid concurrent writes to `config/selectors.json`.
+
+Self-heal writes locator updates atomically (temp file + replace) to keep locator files consistent.
 
 ## 📋 JSON Test Schema
 
@@ -206,7 +232,7 @@ The framework supports the full action set defined in `src/schema/stepSchema.ts`
 
 ### selectors.json
 
-Maps logical element names to CSS selectors:
+Maps logical element names to locator expressions (CSS/XPath):
 
 ```json
 {
@@ -217,6 +243,11 @@ Maps logical element names to CSS selectors:
   "passwordField": "input#password"
 }
 ```
+
+Self-heal update support:
+- JSON locator files (`.json`)
+- Java properties-style files (`.properties`)
+- TypeScript/JavaScript object locator files (`.ts`, `.js`)
 
 ### layered TestData files
 
@@ -326,6 +357,13 @@ The framework maps JSON actions to Playwright MCP tools:
 | screenshot | `mcp_microsoft_pla_browser_take_screenshot` | `{ type, fullPage?, filename? }` |
 | assertText | `mcp_microsoft_pla_browser_snapshot` | `{}` |
 | assertVisible | `mcp_microsoft_pla_browser_is_visible` | `{ ref }` |
+
+Internal self-heal tools:
+
+| Tool | Purpose |
+|------|---------|
+| `mcp_microsoft_pla_browser_get_dom` | Returns cleaned DOM (scripts/styles/inline handlers removed) |
+| `mcp_microsoft_pla_browser_validate_xpath` | Returns XPath match count for uniqueness validation |
 
 ### MCPClient Methods
 

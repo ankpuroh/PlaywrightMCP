@@ -32,6 +32,13 @@ You are the execution specialist for this Playwright MCP automation framework. Y
 - Default self-heal: `true`
 - Default suite workers: `1`
 
+## Self-Heal Environment Notes
+- Runtime self-heal is attempted only after an element action failure.
+- LLM provider priority for healing:
+  1. `OPENAI_API_KEY`
+  2. local Ollama via `OLLAMA_BASE_URL` / `OLLAMA_MODEL`
+- If no provider is configured, execution still proceeds with heuristic healing fallback.
+
 ## Execution Rules
 - Prefer existing framework commands instead of inventing custom scripts.
 - Before execution, confirm the requested test file or metadata file exists.

@@ -291,6 +291,14 @@ MCP Tool
 - Suite execution can run multiple testcases in parallel with `--workers`
 - Parallel runs automatically disable self-heal to avoid concurrent selector updates
 
+### Runtime Self-Heal Architecture:
+- Trigger: any element action failure in `StepExecutor.withHeal()`.
+- DOM capture: MCP tool `mcp_microsoft_pla_browser_get_dom` returns cleaned body HTML.
+- LLM generation: `src/executor/selfHealLLM.ts` asks configured provider (OpenAI or Ollama) for a stable XPath.
+- Validation: MCP tool `mcp_microsoft_pla_browser_validate_xpath` enforces exactly one match.
+- Retry + persistence: action is retried once; successful heal is written atomically to locator file.
+- Failure handling: if retry fails, original action error is re-thrown.
+
 ### Timing Insights:
 - Each step tracks duration
 - Summary includes total runtime

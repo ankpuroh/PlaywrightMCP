@@ -6,7 +6,7 @@ This is a Playwright MCP (Model Context Protocol) automation framework for web t
 ## Key Components
 - **CLI Tool**: `src/cli/index.ts` - Main entry point for running tests
 - **Executor**: `src/executor/` - Handles test execution logic
-- **Selectors**: `config/selectors.json` - Maps logical names to CSS selectors
+- **Selectors**: `config/selectors.json` - Maps logical names to locator expressions (CSS/XPath)
 - **Test Files**: `tests/` directory - JSON test case files
 - **MCP Server**: `playwright-mcp-server.js` - Playwright MCP server implementation
 
@@ -30,9 +30,17 @@ npm install
 npx playwright install
 ```
 
-### 4. Install MCP Server Globally (Optional)
+### 4. Optional: Configure LLM Self-Heal (Ollama local)
+
+The framework uses bundled `playwright-mcp-server.js` automatically. No global MCP package is required.
+
+To enable local LLM healing for broken locators:
+
 ```bash
-npm install -g @executeautomation/playwright-mcp-server
+ollama serve
+ollama pull llama3.1
+set OLLAMA_BASE_URL=http://127.0.0.1:11434
+set OLLAMA_MODEL=llama3.1
 ```
 
 ## Configuration
@@ -47,7 +55,7 @@ Edit `config/env.json` for environment-specific settings:
 ```
 
 ### Selectors Configuration
-Update `config/selectors.json` to map logical names to actual CSS selectors:
+Update `config/selectors.json` to map logical names to actual locator expressions:
 ```json
 {
   "username_field": "input[type=\"text\"]",
@@ -168,6 +176,17 @@ click on login button
 - Test artifacts are saved in `artifacts/` directory
 - Each test run creates a unique subdirectory
 - Includes screenshots, logs, and execution details
+- Includes self-heal events when locator recovery is triggered
+
+## Runtime Self-Heal Flow
+
+On element action failure (`click`, `fill`, etc.), the runtime can:
+1. Capture cleaned DOM (scripts/styles removed)
+2. Ask LLM for stable XPath (only on failure)
+3. Validate XPath resolves to exactly one element
+4. Retry action with healed XPath
+5. Persist healed locator atomically if retry succeeds
+6. Re-throw original error if retry fails
 
 ## Troubleshooting
 

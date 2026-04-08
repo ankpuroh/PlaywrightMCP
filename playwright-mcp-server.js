@@ -254,6 +254,25 @@ class PlaywrightMCPServer {
               },
             },
           },
+          {
+            name: "mcp_microsoft_pla_browser_get_dom",
+            description: "Get cleaned DOM body HTML for self-heal",
+            inputSchema: {
+              type: "object",
+              properties: {},
+            },
+          },
+          {
+            name: "mcp_microsoft_pla_browser_validate_xpath",
+            description: "Validate XPath and return number of matches",
+            inputSchema: {
+              type: "object",
+              properties: {
+                xpath: { type: "string" },
+              },
+              required: ["xpath"],
+            },
+          },
         ],
       };
     });
@@ -564,6 +583,58 @@ class PlaywrightMCPServer {
               await new Promise((resolve) => setTimeout(resolve, 500));
             }
             throw new Error(`No new tab appeared after ${timeoutMs}ms`);
+
+          case "mcp_microsoft_pla_browser_get_dom":
+            await this.ensureBrowser();
+            if (!this.page) {
+              throw new Error("Page not available for get_dom");
+            }
+            const cleanedDom = await this.page.evaluate(() => {
+              const bodyClone = document.body.cloneNode(true);
+
+              bodyClone.querySelectorAll("script, style, noscript, iframe").forEach((el) => {
+                el.remove();
+              });
+
+              bodyClone.querySelectorAll("*").forEach((el) => {
+                Array.from(el.attributes)
+                  .filter((attr) => attr.name.startsWith("on"))
+                  .forEach((attr) => el.removeAttribute(attr.name));
+              });
+
+              return bodyClone.innerHTML;
+            });
+
+            return {
+              content: [{ type: "text", text: cleanedDom }],
+            };
+
+          case "mcp_microsoft_pla_browser_validate_xpath":
+            await this.ensureBrowser();
+            if (!this.page) {
+              throw new Error("Page not available for validate_xpath");
+            }
+            if (!args.xpath || typeof args.xpath !== "string") {
+              throw new Error("validate_xpath requires a xpath string");
+            }
+            const xpathCount = await this.page.evaluate((xpath) => {
+              try {
+                const result = document.evaluate(
+                  xpath,
+                  document,
+                  null,
+                  XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,
+                  null
+                );
+                return result.snapshotLength;
+              } catch {
+                return -1;
+              }
+            }, args.xpath);
+
+            return {
+              content: [{ type: "text", text: String(xpathCount) }],
+            };
 
           default:
             throw new Error(`Unknown tool: ${name}`);

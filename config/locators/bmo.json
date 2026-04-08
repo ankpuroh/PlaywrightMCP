@@ -65,7 +65,7 @@
   },
   "BmoFooterSection": {
     "footerContainer": "footer, [role='contentinfo']",
-    "privacyLink": "footer a:has-text('Privacy'), role=link[name='Privacy']",
+    "privacyLink": "footer a:has-text('Privacy')",
     "legalLink": "footer a:has-text('Legal'), role=link[name='Legal']",
     "securityLink": "footer a:has-text('Security'), role=link[name='Security']",
     "memberFdicLink": "footer a:has-text('Member FDIC'), role=link[name*='FDIC']",

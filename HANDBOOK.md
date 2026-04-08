@@ -258,7 +258,20 @@ The current GUI does not provide an Artifacts tab, so inspect these files direct
 
 ### Self-Heal
 
-Single-flow execution enables self-heal by default. When an element action fails, the framework can snapshot the page, attempt a replacement selector, persist it, and retry the action once.
+Single-flow execution enables self-heal by default. When an element action fails, the framework executes this flow:
+1. Capture cleaned DOM from current page (remove scripts/styles/inline handlers).
+2. Send DOM + logical target description to configured LLM (only on failure).
+3. Generate stable XPath with preference for `id`, `name`, `aria-label`, `role`, and visible text.
+4. Validate XPath resolves to exactly one element.
+5. Retry original action using healed XPath.
+6. If retry succeeds, persist locator atomically and log self-heal event.
+7. If retry fails, throw original action error.
+
+LLM provider priority:
+- `OPENAI_API_KEY`
+- local Ollama (`OLLAMA_BASE_URL` / `OLLAMA_MODEL`)
+
+If no provider is configured, heuristic healing is used as fallback.
 
 ### Parallel Suite Runs
 

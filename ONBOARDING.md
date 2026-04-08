@@ -56,8 +56,8 @@ Test JSON file  →  Locator map (selectors.json)  →  Playwright MCP  →  Bro
 ```
 
 - **Test JSON**: a list of steps (`navigate`, `fill`, `click`, `assertText`, etc.) with logical target names like `LoginPage.usernameField`.
-- **selectors.json**: maps those logical names to real CSS selectors. The framework fills this in automatically when you run *discover-locators*.
-- **Self-heal**: if a selector breaks between runs, the framework will try to find a replacement automatically (enabled by default).
+- **selectors.json**: maps those logical names to real locator expressions (CSS/XPath). The framework fills this in automatically when you run *discover-locators*.
+- **Self-heal**: if a selector breaks between runs, the framework heals on failure by capturing cleaned DOM, generating a stable XPath through LLM, validating uniqueness, retrying once, and persisting the healed locator.
 - **MCP Client**: a Playwright subprocess is started for every test run. No shared browser state between tests.
 
 ---
@@ -156,7 +156,7 @@ The framework performs the substitution at runtime before executing each step. S
 
 ## 5. Discover Locators
 
-Before running a test for the first time, the framework needs to learn the CSS selectors for each logical target name (e.g. `LoginPage.usernameField`).
+Before running a test for the first time, the framework needs to learn locator expressions for each logical target name (e.g. `LoginPage.usernameField`).
 
 Run discovery with your seed or new test file:
 
@@ -192,6 +192,15 @@ Optional flags:
 | `--dataDomain` | none | Domain data file or CSV list |
 | `--output` | auto | Where screenshots and logs go |
 
+Optional environment for local LLM healing:
+
+```bash
+ollama serve
+ollama pull llama3.1
+set OLLAMA_BASE_URL=http://127.0.0.1:11434
+set OLLAMA_MODEL=llama3.1
+```
+
 Example with explicit flags:
 
 ```bash
@@ -211,6 +220,8 @@ After a test run:
 | Text report | `artifacts/<runId>/report-email.txt` |
 | Screenshots | `artifacts/<runId>/` |
 | Healed selectors | `config/selectors.json` (updated in place) |
+
+Locator file writes are atomic to prevent partial/corrupted updates.
 
 The current GUI is focused on metadata/data editing and does not have an Artifacts tab. Review run outputs directly under `artifacts/<runId>/`.
 

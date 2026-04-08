@@ -273,6 +273,23 @@ export class PlaywrightMCPClient {
   }
 
   /**
+   * Get cleaned DOM body HTML for self-heal LLM context
+   */
+  async getDOMContent(): Promise<string> {
+    const result = await this.callTool("mcp_microsoft_pla_browser_get_dom", {});
+    return result.content?.[0]?.text ?? "";
+  }
+
+  /**
+   * Validate XPath and return number of matched elements
+   */
+  async validateXPath(xpath: string): Promise<number> {
+    const result = await this.callTool("mcp_microsoft_pla_browser_validate_xpath", { xpath });
+    const count = Number.parseInt(result.content?.[0]?.text ?? "-1", 10);
+    return Number.isFinite(count) ? count : -1;
+  }
+
+  /**
    * Scroll page count times
    */
   async scroll(count: number = 1): Promise<MCPToolResult> {
