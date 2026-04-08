@@ -27,6 +27,7 @@ You are a specialist agent for this Playwright MCP automation framework. Your jo
 - Preserve the original English step in `metadata.originalEnglish`.
 - Reuse existing page names, element names, placeholders, and selectors when already present.
 - **Prefer XPath over CSS selectors** when writing locator values in POM entries. Use CSS only as a last resort when no suitable XPath expression is practical.
+- Do not mix selector engines in one locator string (for example, avoid combining `role=...` with CSS in a comma-separated selector). Keep each locator in a single valid Playwright selector syntax.
 - XPath preference order:
   1. Attribute-based XPath: `//*[@data-testid='x']`, `//*[@name='x']`, `//*[@id='x']`
   2. ARIA/role-based XPath: `//*[@aria-label='x']`, `//*[@role='button' and normalize-space()='x']`
@@ -59,6 +60,7 @@ Create or update these artifacts when converting a testcase:
 - Page-specific locator file if needed, using a clear naming pattern under `config/locators/`
 - `config/locators/pageObjects.json`
 - `config/TestMetaData.json` (append or update testcase entry for the converted test)
+- If generated locators are uncertain, note that `discover-locators` can refine unresolved targets using LLM-first discovery with heuristic fallback.
 
 ## Constraints
 - Do not invent unsupported framework actions.

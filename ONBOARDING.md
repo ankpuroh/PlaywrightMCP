@@ -166,9 +166,11 @@ npm run discover-locators -- --file tests/MyFeature.json
 
 What happens:
 1. A browser opens and navigates through the test steps.
-2. After each step, the page is snapped and all unresolved targets are searched for.
-3. Found selectors are written to `config/selectors.json` automatically.
-4. Any target that could not be found is listed in the console output — fix those manually.
+2. After each step, discovery captures cleaned DOM and snapshot context.
+3. For unresolved targets, discovery tries LLM-generated XPath first (when configured) and validates uniqueness.
+4. If LLM is unavailable/invalid, discovery falls back to built-in heuristic locator search.
+5. Found selectors are written to `config/selectors.json` automatically.
+6. Any target that could not be found is listed in the console output — fix those manually.
 
 You only need to run discovery when:
 - You create a new test with new target names.
@@ -299,10 +301,10 @@ Recommended values:
 
 | Symptom | Fix |
 |---------|-----|
-| `Cannot find selector for target "X"` | Run `npm run discover-locators` for the test; the element may not be visible until earlier steps complete |
+| `Cannot find selector for target "X"` | Run `npm run discover-locators` for the test; discovery will try LLM first (if configured) and then heuristic fallback |
 | Test fails immediately with a navigation error | Check the resolved `baseUrl` in your `config/TestData/*.json` files and confirm the app is running |
 | Screenshots are blank / all white | The page may still be loading; add a `waitFor` step before the screenshot |
-| `selfHeal` did not fix a broken selector | The element's text/label changed entirely — update `config/selectors.json` manually or re-run discover-locators |
+| `selfHeal` did not fix a broken selector | Re-run `discover-locators` (LLM-first + heuristic fallback); if still unresolved, update locator manually |
 | Parallel run is slower than serial | Browser subprocesses compete for CPU; reduce `--workers` |
 | `tsc` errors after editing source files | Run `npm run build` and read the TypeScript error — most are type mismatches |
 | GUI not opening | Check the port: `http://localhost:4317`; kill any process holding port 4317 |

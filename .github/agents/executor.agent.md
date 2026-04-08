@@ -38,6 +38,7 @@ You are the execution specialist for this Playwright MCP automation framework. Y
   1. `OPENAI_API_KEY`
   2. local Ollama via `OLLAMA_BASE_URL` / `OLLAMA_MODEL`
 - If no provider is configured, execution still proceeds with heuristic healing fallback.
+- `discover-locators` uses the same provider settings with an LLM-first strategy and heuristic fallback.
 
 ## Execution Rules
 - Prefer existing framework commands instead of inventing custom scripts.
@@ -46,6 +47,7 @@ You are the execution specialist for this Playwright MCP automation framework. Y
 - If both tags and exclude tags are given, apply both.
 - For `run-suite` with `workers > 1`, explicitly pass `--workers <n>`.
 - For `run-suite` with `workers > 1`, pass `--selfHeal false` to avoid concurrent selector file update races.
+- If repeated locator failures occur, prefer running `discover-locators` first because discovery now attempts LLM-based locator generation before heuristic fallback.
 - Do not modify tests unless explicitly asked.
 - Do not hide failures; report failing testcase ids and where results were written.
 

@@ -188,6 +188,15 @@ On element action failure (`click`, `fill`, etc.), the runtime can:
 5. Persist healed locator atomically if retry succeeds
 6. Re-throw original error if retry fails
 
+## Locator Discovery Flow
+
+When running `discover-locators`, the framework can:
+1. Capture cleaned DOM and page snapshot context
+2. Ask LLM for XPath for unresolved logical targets
+3. Validate XPath resolves to exactly one element
+4. Fall back to built-in heuristic discovery if LLM is unavailable/invalid
+5. Persist discovered locators atomically
+
 ## Troubleshooting
 
 ### Common Issues

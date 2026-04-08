@@ -39,8 +39,8 @@
     "passwordRequiredMsg": "text=Password is required"
   },
   "BmoRegisterPage": {
-    "accountTypeDropdown": "[aria-label='Account Type'], [name='accountType']",
-    "checkingOption": "role=option[name='Checking']",
+    "accountTypeDropdown": "ion-select[aria-label='Account Type'], ion-item:has-text('Account Type') ion-select, [role='button']:has-text('Account Type')",
+    "checkingOption": "button:has-text('Checking'), [role='option']:has-text('Checking'), .alert-radio-label:has-text('Checking')",
     "accountNumberField": "input[name='accountNumber'], [aria-label='Account Number']"
   },
   "BmoForgotUserIdPage": {

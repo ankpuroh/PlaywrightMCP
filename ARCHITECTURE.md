@@ -299,6 +299,14 @@ MCP Tool
 - Retry + persistence: action is retried once; successful heal is written atomically to locator file.
 - Failure handling: if retry fails, original action error is re-thrown.
 
+### Locator Discovery Architecture:
+- Trigger: `discover-locators` command and step-wise unresolved target checks.
+- DOM + snapshot context: discovery captures cleaned DOM and accessibility snapshot.
+- LLM-first strategy: discovery asks `src/executor/selfHealLLM.ts` for XPath candidates.
+- Validation gate: each LLM XPath is accepted only if `validate_xpath` returns exactly one match.
+- Fallback: when no provider is configured or candidate is invalid, `findLocatorByName()` heuristic logic is used.
+- Persistence: discovered locators are saved atomically to selector files.
+
 ### Timing Insights:
 - Each step tracks duration
 - Summary includes total runtime

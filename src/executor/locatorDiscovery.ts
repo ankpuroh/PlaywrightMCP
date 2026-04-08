@@ -153,10 +153,11 @@ export class LocatorDiscovery {
     });
 
     const snapshotText = JSON.stringify(snapshot, null, 2);
+    const domForLLM = await this.safeGetDomForDiscovery();
 
     // Try to find elements by common patterns based on target name
     for (const target of targetNames) {
-      const locator = this.findLocatorByName(target, snapshotText, snapshot);
+      const locator = await this.discoverLocator(target, snapshotText, snapshot, domForLLM);
       if (locator) {
         discovered[target] = locator;
         this.logger.info(`Discovered locator for "${target}"`, {
@@ -168,6 +169,62 @@ export class LocatorDiscovery {
     }
 
     return discovered;
+  }
+
+  private async safeGetDomForDiscovery(): Promise<string | null> {
+    try {
+      const dom = await this.client.getDOMContent();
+      return dom || null;
+    } catch (error) {
+      this.logger.debug("DOM capture unavailable for LLM discovery, using heuristic fallback", {
+        error: String(error),
+      });
+      return null;
+    }
+  }
+
+  private async discoverLocatorWithLLM(
+    target: string,
+    dom: string | null
+  ): Promise<string | null> {
+    if (!dom) {
+      return null;
+    }
+
+    const llmXPath = await generateXPathWithLLM(dom, target);
+    if (!llmXPath) {
+      return null;
+    }
+
+    const matchCount = await this.client.validateXPath(llmXPath);
+    if (matchCount !== 1) {
+      this.logger.warn(`[discovery] Rejected LLM locator for "${target}"`, {
+        locator: llmXPath,
+        matchCount,
+      });
+      return null;
+    }
+
+    this.logger.success(`[discovery] LLM locator accepted for "${target}"`, {
+      locator: llmXPath,
+    });
+    return llmXPath;
+  }
+
+  private async discoverLocator(
+    target: string,
+    snapshotText: string,
+    snapshot: any,
+    domForLLM: string | null
+  ): Promise<string | null> {
+    // Prefer LLM-assisted locator generation when available/configured.
+    const llmLocator = await this.discoverLocatorWithLLM(target, domForLLM);
+    if (llmLocator) {
+      return llmLocator;
+    }
+
+    // Fall back to existing heuristic mechanism.
+    return this.findLocatorByName(target, snapshotText, snapshot);
   }
 
   /**
@@ -567,7 +624,8 @@ export class LocatorDiscovery {
           const preSnapshot = await this.getPageSnapshot();
           if (preSnapshot) {
             const preSnapshotText = JSON.stringify(preSnapshot, null, 2);
-            const inferred = this.findLocatorByName(step.target, preSnapshotText, preSnapshot);
+            const preDom = await this.safeGetDomForDiscovery();
+            const inferred = await this.discoverLocator(step.target, preSnapshotText, preSnapshot, preDom);
             if (inferred) {
               selectors[step.target] = inferred;
               stepExecutor.updateSelector(step.target, inferred);
@@ -595,6 +653,7 @@ export class LocatorDiscovery {
         // Fetch DOM snapshot after every step
         const postSnapshot = await this.getPageSnapshot();
         const postSnapshotText = postSnapshot ? JSON.stringify(postSnapshot, null, 2) : null;
+        const postDom = await this.safeGetDomForDiscovery();
 
         if (!postSnapshot) {
           this.logger.warn("Snapshot unavailable after step", { step: step.id });
@@ -619,7 +678,7 @@ export class LocatorDiscovery {
 
           let discoveredLocator = null;
           if (postSnapshotText) {
-            discoveredLocator = this.findLocatorByName(target, postSnapshotText, postSnapshot);
+            discoveredLocator = await this.discoverLocator(target, postSnapshotText, postSnapshot, postDom);
           }
 
           if (discoveredLocator) {

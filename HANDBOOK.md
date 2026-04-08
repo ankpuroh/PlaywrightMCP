@@ -187,8 +187,10 @@ What it does:
 
 1. Loads the flow.
 2. Executes it step by step.
-3. Captures snapshots before and after steps.
-4. Writes newly discovered selectors into `config/selectors.json`.
+3. Captures cleaned DOM and snapshots before/after steps.
+4. For unresolved targets, tries LLM-generated XPath first and validates it resolves to exactly one element.
+5. Falls back to heuristic snapshot analysis when LLM is unavailable or invalid.
+6. Writes newly discovered selectors into `config/selectors.json`.
 
 ## Running Tests
 
@@ -272,6 +274,8 @@ LLM provider priority:
 - local Ollama (`OLLAMA_BASE_URL` / `OLLAMA_MODEL`)
 
 If no provider is configured, heuristic healing is used as fallback.
+
+The same provider configuration is used by locator discovery for LLM-first discovery with heuristic fallback.
 
 ### Parallel Suite Runs
 

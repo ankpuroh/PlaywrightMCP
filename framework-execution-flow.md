@@ -41,11 +41,12 @@ The framework uses Model Context Protocol (MCP) to communicate between a Node.js
   - Loads `config/selectors.json`.
   - For each step in the test flow:
     - Navigates to pages and performs actions.
-    - Captures page snapshots using MCP `getSnapshot()`.
-    - Analyzes snapshots to find locators (e.g., by text, attributes).
+    - Captures cleaned DOM and page snapshots.
+    - Tries LLM-generated XPath for unresolved targets and validates uniqueness.
+    - Falls back to heuristic snapshot analysis when LLM is not configured/unusable.
     - Updates `selectors.json` with discovered locators.
   - Uses conservative updates: Only modifies missing/fallback selectors.
-- **Key Methods**: `runDiscovery()`, `findLocatorByName()`.
+- **Key Methods**: `runDiscovery()`, `discoverLocator()`, `discoverLocatorWithLLM()`, `findLocatorByName()`.
 
 ### 5. Step Execution Loop (`src/executor/executor.ts`)
 

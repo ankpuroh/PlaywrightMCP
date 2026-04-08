@@ -15,6 +15,7 @@ This framework bridges the gap between AI-generated test specifications (JSON) a
 - **Selector Resolution**: Configurable element locators via `selectors.json`
 - **Runtime Self-Heal**: On failure, captures cleaned DOM, generates XPath through LLM, validates uniqueness, retries once, and persists healed locator
 - **Local LLM Option**: Supports local Ollama for offline self-healing
+- **LLM-Assisted Locator Discovery**: `discover-locators` uses LLM-first locator generation with heuristic fallback
 - **Parallel Suite Execution**: Run tagged suites with configurable workers
 - **Rich Logging**: Comprehensive execution logs with structured output
 - **Artifact Management**: Automatic screenshot and log collection
@@ -92,9 +93,10 @@ npm run run-test -- \
 
 The framework starts the bundled MCP server automatically with `node playwright-mcp-server.js`. Use `--mcp` only when you want to override that command.
 
-### Self-Heal LLM Setup (Optional)
+### Self-Heal and Discovery LLM Setup (Optional)
 
 Self-heal calls an LLM only when an element action fails due to missing/invalid locator.
+Locator discovery (`discover-locators`) also uses LLM first for unresolved targets and falls back automatically to heuristic discovery if LLM is not configured or validation fails.
 
 Provider priority:
 1. `OPENAI_API_KEY` (OpenAI)
@@ -112,7 +114,7 @@ set OLLAMA_BASE_URL=http://127.0.0.1:11434
 set OLLAMA_MODEL=llama3.1
 ```
 
-If no provider is configured, self-heal falls back to non-LLM heuristic discovery.
+If no provider is configured, both self-heal and locator discovery fall back to non-LLM heuristic discovery.
 
 ### Page Object Model + Parameterized Data
 

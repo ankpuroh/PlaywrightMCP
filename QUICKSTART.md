@@ -278,6 +278,14 @@ The framework can auto-heal a failed locator in single-test mode:
 5. persist healed locator if retry succeeds.
 
 If healing also fails, the original action error is surfaced.
+
+For first-time flows or broad UI changes, run discovery to pre-populate locators:
+
+```bash
+npm run discover-locators -- --file tests/mytest.json
+```
+
+Discovery uses LLM-first locator generation when configured and falls back to heuristic discovery automatically.
 ```
 ✗ Error: Element "submitBtn" not found
 
