@@ -1,14 +1,3 @@
 {
-  "defaults": {
-    "executionEnv": "qa",
-    "defaultTimeoutMs": 30000
-  },
-  "datasets": {
-    "qa": {
-      "executionEnv": "qa"
-    },
-    "staging": {
-      "executionEnv": "staging"
-    }
-  }
+
 }

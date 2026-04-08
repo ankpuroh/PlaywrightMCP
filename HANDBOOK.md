@@ -86,7 +86,6 @@ The current framework is most reliable when tests are authored directly as JSON 
 Recommended starting files:
 - `tests/sample.json`
 - `tests/seed.json`
-- `tests/Hiroku1.json`
 
 ### Plain-English Inputs
 
@@ -197,10 +196,10 @@ What it does:
 ### Single Flow
 
 ```bash
-npm run run-test -- --file tests/Hiroku1.json \
+npm run run-test -- --file tests/MyFlow.json \
   --dataCommon config/TestData/common.json \
-  --dataDomain config/TestData/domain.herokuapp.json \
-  --data config/TestData/testdata.hiroku1.json \
+  --dataDomain config/TestData/domain.myapp.json \
+  --data config/TestData/testdata.myflow.json \
   --selfHeal true
 ```
 
@@ -215,9 +214,9 @@ Example shape:
   "name": "Sample Tagged Suite",
   "testcases": [
     {
-      "id": "heroku-checkbox",
-      "file": "tests/Hiroku1.json",
-      "tags": ["smoke", "heroku"]
+      "id": "my-feature",
+      "file": "tests/MyFlow.json",
+      "tags": ["smoke", "regression"]
     }
   ]
 }

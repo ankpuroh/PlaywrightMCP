@@ -10,11 +10,11 @@ The framework uses Model Context Protocol (MCP) to communicate between a Node.js
 
 ### 1. Command Initiation (`package.json` and `src/cli/index.ts`)
 
-- **User Command**: `npm run run-test -- --file tests/Hirolu3.json`
+- **User Command**: `npm run run-test -- --file tests/MyFlow.json`
 - **Package.json Script**: `"run-test": "ts-node src/cli/index.ts run-json"`
 - **Entry Point**: `src/cli/index.ts`
   - Parses command-line arguments using `yargs`.
-  - Extracts the test file path (e.g., `tests/Hirolu3.json`).
+  - Extracts the test file path (e.g., `tests/MyFlow.json`).
   - Calls the `runTest` function with the file path.
 
 ### 2. Test Loading and Validation (`src/cli/index.ts` and `src/schema/stepSchema.ts`)

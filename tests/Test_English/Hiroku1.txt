@@ -1,4 +1,0 @@
-navigate to https://the-internet.herokuapp.com/
-click on link Checkboxes
-check checkbox1
-uncheck checkbox2

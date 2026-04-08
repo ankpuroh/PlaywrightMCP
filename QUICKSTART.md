@@ -248,14 +248,14 @@ Environment settings:
 
 ## 📚 Example Tests
 
-### Login Test
-See `tests/login.json`
+### Login Flow
+See `tests/sample.json`
 
-### Product Search & Add to Cart
-See `tests/workflow.json`
+### Multi-Step Workflow
+See `tests/seed.json`
 
 ### Basic Navigation
-See `tests/sample.json`
+See `tests/simple.json`
 
 ## 🐛 Troubleshooting
 

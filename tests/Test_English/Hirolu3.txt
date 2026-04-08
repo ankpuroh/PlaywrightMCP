@@ -1,3 +1,0 @@
-navigate to https://the-internet.herokuapp.com/
-click on link Dropdown
-In the dropdown select option 1

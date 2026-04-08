@@ -73,3 +73,4 @@ When done, provide a short handoff note with:
 - suite/scenario names
 - any required test data placeholders
 - any locator assumptions discovered during exploration
+- if any element targets are uncertain or not directly visible in the snapshot, flag them explicitly so the Executor runs `discover-locators` (LLM-first + heuristic fallback) before the first test execution

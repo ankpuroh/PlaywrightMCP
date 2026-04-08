@@ -73,10 +73,10 @@ npm run run-test -- --file tests/TC01.json
 ```
 
 ### Available Test Files
-- `tests/TC01.json` - SauceDemo login and cart test
+- `tests/TC01.json` - Sample test flow
 - `tests/simple.json` - Basic navigation test
 - `tests/sample.json` - Sample test case
-- `tests/Guru99.json` - Guru99 demo site test
+- `tests/MyFlow.json` - Example multi-step feature test
 
 ### Test File Format
 Test files are JSON arrays with step objects:
@@ -124,32 +124,32 @@ Test files are JSON arrays with step objects:
 2. Use the framework's conversion logic or manually create JSON
 
 ### Example Text to JSON Conversion
-**Input (Guru99.txt):**
+**Input (MyFlow.txt):**
 ```
-Navigate to https://demo.guru99.com/V4/
-Enter "XYZ" in user Id field
+Navigate to https://example.com
+Enter "testuser" in username field
 Enter "password" in password field
-click on login button
+Click on login button
 ```
 
-**Output (Guru99.json):**
+**Output (MyFlow.json):**
 ```json
 [
   {
     "id": "step-1",
     "action": "navigate",
-    "target": "https://demo.guru99.com/V4/",
+    "target": "https://example.com",
     "metadata": {
-      "originalEnglish": "Navigate to https://demo.guru99.com/V4/"
+      "originalEnglish": "Navigate to https://example.com"
     }
   },
   {
     "id": "step-2",
     "action": "fill",
     "target": "username_field",
-    "value": "XYZ",
+    "value": "testuser",
     "metadata": {
-      "originalEnglish": "Enter \"XYZ\" in user Id field"
+      "originalEnglish": "Enter \"testuser\" in username field"
     }
   },
   {
@@ -166,7 +166,7 @@ click on login button
     "action": "click",
     "target": "login_button",
     "metadata": {
-      "originalEnglish": "click on login button"
+      "originalEnglish": "Click on login button"
     }
   }
 ]

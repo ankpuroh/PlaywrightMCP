@@ -1,4 +1,0 @@
-navigate to https://the-internet.herokuapp.com/
-click on link Add/Remove Elements
-click on "Add Element" button
-click on "Delete" button

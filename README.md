@@ -80,13 +80,13 @@ Or with custom options:
 
 ```bash
 npm run run-test -- \
-  --file tests/sample.json \
+  --file tests/MyFlow.json \
   --selectors config/selectors.json \
   --pom config/locators/pageObjects.json \
   --dataCommon config/TestData/common.json \
-  --dataDomain config/TestData/domain.herokuapp.json \
-  --data config/TestData/testdata.sample.json \
-  --dataset alt-search \
+  --dataDomain config/TestData/domain.myapp.json \
+  --data config/TestData/testdata.myflow.json \
+  --dataset qa \
   --output ./my-artifacts \
   --selfHeal true
 ```
@@ -162,7 +162,7 @@ Run a suite with shared data layers:
 npm run run-suite -- \
   --suite config/TestMetaData.json \
   --dataCommon config/TestData/common.json \
-  --dataDomain config/TestData/domain.guru99.json,config/TestData/domain.herokuapp.json \
+  --dataDomain config/TestData/domain.myapp.json \
   --dataset qa
 ```
 

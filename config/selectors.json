@@ -1,19 +1,3 @@
 {
-  "username_field": "#user-name",
-  "password_field": "#password",
-  "login_button": "//input[@type='submit']",
-  "sauce_labs_bike_light_link": "a:has-text(\"sauce labs bike light\")",
-  "add_to_cart_button": "//button[@id=\"add-to-cart\"]",
-  "shopping_cart_link": "Need to provide locator as locator not observed",
-  "checkboxes_link": "a:has-text(\"checkboxes\")",
-  "checkbox1": "//input[@type='checkbox'][1]",
-  "checkbox2": "//input[@type='checkbox'][2]",
-  "add_remove_elements_link": "a:has-text(\"add/remove elements\")",
-  "add_element_button": "button[text()=\"Add Element\"]",
-  "delete_button": "button[text()=\"Delete\"]",
-  "dropdown_link": "a:has-text(\"dropdown\")",
-  "dropdown_menu": "//select[@id='dropdown']",
-  "disappearing_elements_link": "a:has-text(\"disappearing elements\")",
-  "home_link": "a:has-text(\"home\")",
-  "{{bmoBaseUrl}}": "Need to provide locator as locator not observed"
+
 }

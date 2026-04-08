@@ -1,4 +1,0 @@
-Navigate to https://demo.guru99.com/V4/
-Enter "XYZ" in user Id field
-Enter "password" in password field
-click on login button
