@@ -1,0 +1,77 @@
+[
+  {
+    "id": "step-1",
+    "action": "navigate",
+    "target": "{{baseUrl}}",
+    "metadata": {
+      "originalEnglish": "Navigate to SauceDemo login page"
+    }
+  },
+  {
+    "id": "step-2",
+    "action": "assertVisible",
+    "target": "LoginPage.usernameField",
+    "metadata": {
+      "originalEnglish": "Username field is visible"
+    }
+  },
+  {
+    "id": "step-3",
+    "action": "assertVisible",
+    "target": "LoginPage.passwordField",
+    "metadata": {
+      "originalEnglish": "Password field is visible"
+    }
+  },
+  {
+    "id": "step-4",
+    "action": "assertVisible",
+    "target": "LoginPage.loginButton",
+    "metadata": {
+      "originalEnglish": "Login button is visible"
+    }
+  },
+  {
+    "id": "step-5",
+    "action": "fill",
+    "target": "LoginPage.usernameField",
+    "value": "{{standardUser}}",
+    "metadata": {
+      "originalEnglish": "Enter username"
+    }
+  },
+  {
+    "id": "step-6",
+    "action": "fill",
+    "target": "LoginPage.passwordField",
+    "value": "{{userPassword}}",
+    "metadata": {
+      "originalEnglish": "Enter password"
+    }
+  },
+  {
+    "id": "step-7",
+    "action": "click",
+    "target": "LoginPage.loginButton",
+    "metadata": {
+      "originalEnglish": "Click login button"
+    }
+  },
+  {
+    "id": "step-8",
+    "action": "assertText",
+    "target": "page",
+    "assert": "Products",
+    "metadata": {
+      "originalEnglish": "Verify inventory page loaded with Products heading"
+    }
+  },
+  {
+    "id": "step-9",
+    "action": "screenshot",
+    "target": "after-login",
+    "metadata": {
+      "originalEnglish": "Capture screenshot after successful login"
+    }
+  }
+]

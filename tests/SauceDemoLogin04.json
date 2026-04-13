@@ -1,0 +1,36 @@
+[
+  {
+    "id": "step-1",
+    "action": "navigate",
+    "target": "{{baseUrl}}",
+    "metadata": {
+      "originalEnglish": "Navigate to SauceDemo login page"
+    }
+  },
+  {
+    "id": "step-2",
+    "action": "fill",
+    "target": "LoginPage.usernameField",
+    "value": "{{standardUser}}",
+    "metadata": {
+      "originalEnglish": "Enter username"
+    }
+  },
+  {
+    "id": "step-3",
+    "action": "click",
+    "target": "LoginPage.loginButton",
+    "metadata": {
+      "originalEnglish": "Click login button without entering password"
+    }
+  },
+  {
+    "id": "step-4",
+    "action": "assertText",
+    "target": "page",
+    "assert": "Epic sadface: Password is required",
+    "metadata": {
+      "originalEnglish": "Verify empty password validation error"
+    }
+  }
+]

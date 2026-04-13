@@ -1,0 +1,45 @@
+[
+  {
+    "id": "step-1",
+    "action": "navigate",
+    "target": "{{baseUrl}}",
+    "metadata": {
+      "originalEnglish": "Navigate to SauceDemo login page"
+    }
+  },
+  {
+    "id": "step-2",
+    "action": "fill",
+    "target": "LoginPage.usernameField",
+    "value": "{{invalidUser}}",
+    "metadata": {
+      "originalEnglish": "Enter invalid username"
+    }
+  },
+  {
+    "id": "step-3",
+    "action": "fill",
+    "target": "LoginPage.passwordField",
+    "value": "{{wrongPassword}}",
+    "metadata": {
+      "originalEnglish": "Enter wrong password"
+    }
+  },
+  {
+    "id": "step-4",
+    "action": "click",
+    "target": "LoginPage.loginButton",
+    "metadata": {
+      "originalEnglish": "Click login button"
+    }
+  },
+  {
+    "id": "step-5",
+    "action": "assertText",
+    "target": "page",
+    "assert": "Username and password do not match",
+    "metadata": {
+      "originalEnglish": "Verify wrong credentials error message"
+    }
+  }
+]

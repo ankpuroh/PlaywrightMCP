@@ -1,0 +1,163 @@
+[
+  {
+    "id": "step-1",
+    "action": "navigate",
+    "target": "{{baseUrl}}",
+    "metadata": {
+      "originalEnglish": "Navigate to SauceDemo"
+    }
+  },
+  {
+    "id": "step-2",
+    "action": "fill",
+    "target": "LoginPage.usernameField",
+    "value": "{{standardUser}}",
+    "metadata": {
+      "originalEnglish": "Enter standard user"
+    }
+  },
+  {
+    "id": "step-3",
+    "action": "fill",
+    "target": "LoginPage.passwordField",
+    "value": "{{userPassword}}",
+    "metadata": {
+      "originalEnglish": "Enter password"
+    }
+  },
+  {
+    "id": "step-4",
+    "action": "click",
+    "target": "LoginPage.loginButton",
+    "metadata": {
+      "originalEnglish": "Click login button"
+    }
+  },
+  {
+    "id": "step-5",
+    "action": "click",
+    "target": "InventoryPage.addToCartBackpack",
+    "metadata": {
+      "originalEnglish": "Click Add to Cart for backpack"
+    }
+  },
+  {
+    "id": "step-6",
+    "action": "click",
+    "target": "InventoryPage.cartIcon",
+    "metadata": {
+      "originalEnglish": "Click on cart icon"
+    }
+  },
+  {
+    "id": "step-7",
+    "action": "click",
+    "target": "CartPage.checkoutButton",
+    "metadata": {
+      "originalEnglish": "Click Checkout button"
+    }
+  },
+  {
+    "id": "step-8",
+    "action": "assertText",
+    "target": "page",
+    "assert": "Checkout: Your Information",
+    "metadata": {
+      "originalEnglish": "Verify checkout info page loaded"
+    }
+  },
+  {
+    "id": "step-9",
+    "action": "fill",
+    "target": "CheckoutInfoPage.firstNameField",
+    "value": "{{firstName}}",
+    "metadata": {
+      "originalEnglish": "Enter first name"
+    }
+  },
+  {
+    "id": "step-10",
+    "action": "fill",
+    "target": "CheckoutInfoPage.lastNameField",
+    "value": "{{lastName}}",
+    "metadata": {
+      "originalEnglish": "Enter last name"
+    }
+  },
+  {
+    "id": "step-11",
+    "action": "fill",
+    "target": "CheckoutInfoPage.postalCodeField",
+    "value": "{{postalCode}}",
+    "metadata": {
+      "originalEnglish": "Enter postal code"
+    }
+  },
+  {
+    "id": "step-12",
+    "action": "click",
+    "target": "CheckoutInfoPage.continueButton",
+    "metadata": {
+      "originalEnglish": "Click Continue button"
+    }
+  },
+  {
+    "id": "step-13",
+    "action": "assertText",
+    "target": "page",
+    "assert": "Checkout: Overview",
+    "metadata": {
+      "originalEnglish": "Verify checkout overview page loaded"
+    }
+  },
+  {
+    "id": "step-14",
+    "action": "assertText",
+    "target": "page",
+    "assert": "{{productBackpack}}",
+    "metadata": {
+      "originalEnglish": "Verify item shown in overview"
+    }
+  },
+  {
+    "id": "step-15",
+    "action": "assertVisible",
+    "target": "CheckoutOverviewPage.subtotalLabel",
+    "metadata": {
+      "originalEnglish": "Verify subtotal label visible"
+    }
+  },
+  {
+    "id": "step-16",
+    "action": "assertVisible",
+    "target": "CheckoutOverviewPage.taxLabel",
+    "metadata": {
+      "originalEnglish": "Verify tax label visible"
+    }
+  },
+  {
+    "id": "step-17",
+    "action": "click",
+    "target": "CheckoutOverviewPage.finishButton",
+    "metadata": {
+      "originalEnglish": "Click Finish button"
+    }
+  },
+  {
+    "id": "step-18",
+    "action": "assertText",
+    "target": "page",
+    "assert": "Thank you for your order!",
+    "metadata": {
+      "originalEnglish": "Verify order confirmation"
+    }
+  },
+  {
+    "id": "step-19",
+    "action": "screenshot",
+    "target": "checkout-complete",
+    "metadata": {
+      "originalEnglish": "Capture checkout completion screenshot"
+    }
+  }
+]

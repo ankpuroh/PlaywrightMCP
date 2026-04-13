@@ -1,3 +1,6 @@
 {
-
+  "{{baseUrl}}": "Need to provide locator as locator not observed",
+  "page": "Need to provide locator as locator not observed",
+  "after-login": "Need to provide locator as locator not observed",
+  "ProductDetailPage.backButton": "button[type=\"submit\"]"
 }

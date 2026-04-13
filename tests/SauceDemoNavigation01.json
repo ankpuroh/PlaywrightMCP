@@ -1,0 +1,80 @@
+[
+  {
+    "id": "step-1",
+    "action": "navigate",
+    "target": "{{baseUrl}}",
+    "metadata": {
+      "originalEnglish": "Navigate to SauceDemo"
+    }
+  },
+  {
+    "id": "step-2",
+    "action": "fill",
+    "target": "LoginPage.usernameField",
+    "value": "{{standardUser}}",
+    "metadata": {
+      "originalEnglish": "Enter standard user"
+    }
+  },
+  {
+    "id": "step-3",
+    "action": "fill",
+    "target": "LoginPage.passwordField",
+    "value": "{{userPassword}}",
+    "metadata": {
+      "originalEnglish": "Enter password"
+    }
+  },
+  {
+    "id": "step-4",
+    "action": "click",
+    "target": "LoginPage.loginButton",
+    "metadata": {
+      "originalEnglish": "Click login button"
+    }
+  },
+  {
+    "id": "step-5",
+    "action": "click",
+    "target": "InventoryPage.hamburgerMenu",
+    "metadata": {
+      "originalEnglish": "Click hamburger menu"
+    }
+  },
+  {
+    "id": "step-6",
+    "action": "assertText",
+    "target": "page",
+    "assert": "All Items",
+    "metadata": {
+      "originalEnglish": "Verify All Items menu item"
+    }
+  },
+  {
+    "id": "step-7",
+    "action": "assertText",
+    "target": "page",
+    "assert": "About",
+    "metadata": {
+      "originalEnglish": "Verify About menu item"
+    }
+  },
+  {
+    "id": "step-8",
+    "action": "assertText",
+    "target": "page",
+    "assert": "Logout",
+    "metadata": {
+      "originalEnglish": "Verify Logout menu item"
+    }
+  },
+  {
+    "id": "step-9",
+    "action": "assertText",
+    "target": "page",
+    "assert": "Reset App State",
+    "metadata": {
+      "originalEnglish": "Verify Reset App State menu item"
+    }
+  }
+]

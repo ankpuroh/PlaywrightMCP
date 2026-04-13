@@ -1,0 +1,27 @@
+[
+  {
+    "id": "step-1",
+    "action": "navigate",
+    "target": "https://www.saucedemo.com/inventory.html",
+    "metadata": {
+      "originalEnglish": "Navigate directly to inventory page without login"
+    }
+  },
+  {
+    "id": "step-2",
+    "action": "assertText",
+    "target": "page",
+    "assert": "Swag Labs",
+    "metadata": {
+      "originalEnglish": "Verify redirected to login page"
+    }
+  },
+  {
+    "id": "step-3",
+    "action": "assertVisible",
+    "target": "LoginPage.loginButton",
+    "metadata": {
+      "originalEnglish": "Verify login button is present"
+    }
+  }
+]

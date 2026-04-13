@@ -1,6 +1,160 @@
 {
-    "name":  "CleanFrameworkSuite",
-    "testcases":  [
-
-                  ]
+  "name": "SauceDemoTestSuite",
+  "testcases": [
+    {
+      "id": "saucedemo-login-01",
+      "file": "tests/SauceDemoLogin01.json",
+      "tags": ["smoke", "login", "saucedemo"],
+      "dataCommon": "config/TestData/common.json",
+      "dataDomain": "config/TestData/domain.saucedemo.json"
+    },
+    {
+      "id": "saucedemo-login-02",
+      "file": "tests/SauceDemoLogin02.json",
+      "tags": ["login", "validation", "saucedemo"],
+      "dataCommon": "config/TestData/common.json",
+      "dataDomain": "config/TestData/domain.saucedemo.json"
+    },
+    {
+      "id": "saucedemo-login-03",
+      "file": "tests/SauceDemoLogin03.json",
+      "tags": ["login", "validation", "saucedemo"],
+      "dataCommon": "config/TestData/common.json",
+      "dataDomain": "config/TestData/domain.saucedemo.json"
+    },
+    {
+      "id": "saucedemo-login-04",
+      "file": "tests/SauceDemoLogin04.json",
+      "tags": ["login", "validation", "saucedemo"],
+      "dataCommon": "config/TestData/common.json",
+      "dataDomain": "config/TestData/domain.saucedemo.json"
+    },
+    {
+      "id": "saucedemo-login-05",
+      "file": "tests/SauceDemoLogin05.json",
+      "tags": ["login", "validation", "saucedemo"],
+      "dataCommon": "config/TestData/common.json",
+      "dataDomain": "config/TestData/domain.saucedemo.json"
+    },
+    {
+      "id": "saucedemo-inventory-01",
+      "file": "tests/SauceDemoInventory01.json",
+      "tags": ["smoke", "inventory", "saucedemo"],
+      "dataCommon": "config/TestData/common.json",
+      "dataDomain": "config/TestData/domain.saucedemo.json"
+    },
+    {
+      "id": "saucedemo-inventory-02",
+      "file": "tests/SauceDemoInventory02.json",
+      "tags": ["inventory", "sorting", "saucedemo"],
+      "dataCommon": "config/TestData/common.json",
+      "dataDomain": "config/TestData/domain.saucedemo.json"
+    },
+    {
+      "id": "saucedemo-inventory-03",
+      "file": "tests/SauceDemoInventory03.json",
+      "tags": ["inventory", "sorting", "saucedemo"],
+      "dataCommon": "config/TestData/common.json",
+      "dataDomain": "config/TestData/domain.saucedemo.json"
+    },
+    {
+      "id": "saucedemo-inventory-04",
+      "file": "tests/SauceDemoInventory04.json",
+      "tags": ["inventory", "sorting", "saucedemo"],
+      "dataCommon": "config/TestData/common.json",
+      "dataDomain": "config/TestData/domain.saucedemo.json"
+    },
+    {
+      "id": "saucedemo-inventory-05",
+      "file": "tests/SauceDemoInventory05.json",
+      "tags": ["inventory", "product-details", "saucedemo"],
+      "dataCommon": "config/TestData/common.json",
+      "dataDomain": "config/TestData/domain.saucedemo.json"
+    },
+    {
+      "id": "saucedemo-cart-01",
+      "file": "tests/SauceDemoCart01.json",
+      "tags": ["smoke", "cart", "saucedemo"],
+      "dataCommon": "config/TestData/common.json",
+      "dataDomain": "config/TestData/domain.saucedemo.json"
+    },
+    {
+      "id": "saucedemo-cart-02",
+      "file": "tests/SauceDemoCart02.json",
+      "tags": ["cart", "saucedemo"],
+      "dataCommon": "config/TestData/common.json",
+      "dataDomain": "config/TestData/domain.saucedemo.json"
+    },
+    {
+      "id": "saucedemo-cart-03",
+      "file": "tests/SauceDemoCart03.json",
+      "tags": ["cart", "saucedemo"],
+      "dataCommon": "config/TestData/common.json",
+      "dataDomain": "config/TestData/domain.saucedemo.json"
+    },
+    {
+      "id": "saucedemo-cart-04",
+      "file": "tests/SauceDemoCart04.json",
+      "tags": ["cart", "saucedemo"],
+      "dataCommon": "config/TestData/common.json",
+      "dataDomain": "config/TestData/domain.saucedemo.json"
+    },
+    {
+      "id": "saucedemo-checkout-01",
+      "file": "tests/SauceDemoCheckout01.json",
+      "tags": ["smoke", "checkout", "e2e", "saucedemo"],
+      "dataCommon": "config/TestData/common.json",
+      "dataDomain": "config/TestData/domain.saucedemo.json"
+    },
+    {
+      "id": "saucedemo-checkout-02",
+      "file": "tests/SauceDemoCheckout02.json",
+      "tags": ["checkout", "validation", "saucedemo"],
+      "dataCommon": "config/TestData/common.json",
+      "dataDomain": "config/TestData/domain.saucedemo.json"
+    },
+    {
+      "id": "saucedemo-checkout-03",
+      "file": "tests/SauceDemoCheckout03.json",
+      "tags": ["checkout", "validation", "saucedemo"],
+      "dataCommon": "config/TestData/common.json",
+      "dataDomain": "config/TestData/domain.saucedemo.json"
+    },
+    {
+      "id": "saucedemo-checkout-04",
+      "file": "tests/SauceDemoCheckout04.json",
+      "tags": ["checkout", "validation", "saucedemo"],
+      "dataCommon": "config/TestData/common.json",
+      "dataDomain": "config/TestData/domain.saucedemo.json"
+    },
+    {
+      "id": "saucedemo-checkout-05",
+      "file": "tests/SauceDemoCheckout05.json",
+      "tags": ["checkout", "saucedemo"],
+      "dataCommon": "config/TestData/common.json",
+      "dataDomain": "config/TestData/domain.saucedemo.json"
+    },
+    {
+      "id": "saucedemo-navigation-01",
+      "file": "tests/SauceDemoNavigation01.json",
+      "tags": ["navigation", "menu", "saucedemo"],
+      "dataCommon": "config/TestData/common.json",
+      "dataDomain": "config/TestData/domain.saucedemo.json"
+    },
+    {
+      "id": "saucedemo-navigation-02",
+      "file": "tests/SauceDemoNavigation02.json",
+      "tags": ["navigation", "logout", "saucedemo"],
+      "dataCommon": "config/TestData/common.json",
+      "dataDomain": "config/TestData/domain.saucedemo.json"
+    },
+    {
+      "id": "saucedemo-navigation-03",
+      "file": "tests/SauceDemoNavigation03.json",
+      "tags": ["navigation", "security", "saucedemo"],
+      "dataCommon": "config/TestData/common.json",
+      "dataDomain": "config/TestData/domain.saucedemo.json"
+    }
+  ]
 }
+

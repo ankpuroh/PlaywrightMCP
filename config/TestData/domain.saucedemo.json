@@ -1,0 +1,23 @@
+{
+  "defaults": {
+    "baseUrl": "https://www.saucedemo.com/",
+    "firstName": "Jane",
+    "lastName": "Doe",
+    "postalCode": "12345",
+    "standardUser": "standard_user",
+    "lockedUser": "locked_out_user",
+    "performanceGlitchUser": "performance_glitch_user",
+    "problemUser": "problem_user",
+    "userPassword": "secret_sauce",
+    "invalidUser": "invalid_user",
+    "wrongPassword": "wrong_password",
+    "productBackpack": "Sauce Labs Backpack",
+    "productBikeLight": "Sauce Labs Bike Light",
+    "productTShirt": "Sauce Labs T-Shirt (Red)",
+    "priceLowest": "$7.99",
+    "priceHighest": "$49.99",
+    "sortOptionZA": "za",
+    "sortOptionLoHi": "lohi",
+    "sortOptionHiLo": "hilo"
+  }
+}

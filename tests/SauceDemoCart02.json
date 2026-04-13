@@ -1,0 +1,87 @@
+[
+  {
+    "id": "step-1",
+    "action": "navigate",
+    "target": "{{baseUrl}}",
+    "metadata": {
+      "originalEnglish": "Navigate to SauceDemo"
+    }
+  },
+  {
+    "id": "step-2",
+    "action": "fill",
+    "target": "LoginPage.usernameField",
+    "value": "{{standardUser}}",
+    "metadata": {
+      "originalEnglish": "Enter standard user"
+    }
+  },
+  {
+    "id": "step-3",
+    "action": "fill",
+    "target": "LoginPage.passwordField",
+    "value": "{{userPassword}}",
+    "metadata": {
+      "originalEnglish": "Enter password"
+    }
+  },
+  {
+    "id": "step-4",
+    "action": "click",
+    "target": "LoginPage.loginButton",
+    "metadata": {
+      "originalEnglish": "Click login button"
+    }
+  },
+  {
+    "id": "step-5",
+    "action": "click",
+    "target": "InventoryPage.addToCartBackpack",
+    "metadata": {
+      "originalEnglish": "Click Add to Cart for backpack"
+    }
+  },
+  {
+    "id": "step-6",
+    "action": "click",
+    "target": "InventoryPage.addToCartBikeLight",
+    "metadata": {
+      "originalEnglish": "Click Add to Cart for bike light"
+    }
+  },
+  {
+    "id": "step-7",
+    "action": "assertText",
+    "target": "page",
+    "assert": "2",
+    "metadata": {
+      "originalEnglish": "Verify cart badge shows 2 items"
+    }
+  },
+  {
+    "id": "step-8",
+    "action": "click",
+    "target": "InventoryPage.cartIcon",
+    "metadata": {
+      "originalEnglish": "Click on cart icon"
+    }
+  },
+  {
+    "id": "step-9",
+    "action": "assertText",
+    "target": "page",
+    "assert": "{{productBackpack}}",
+    "metadata": {
+      "originalEnglish": "Verify first item in cart"
+    }
+  },
+  {
+    "id": "step-10",
+    "action": "assertText",
+    "target": "page",
+    "assert": "{{productBikeLight}}",
+    "metadata": {
+      "originalEnglish": "Verify second item in cart"
+    }
+  }
+]

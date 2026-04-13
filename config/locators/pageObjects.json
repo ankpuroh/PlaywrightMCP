@@ -1,5 +1,47 @@
 {
-    "GenericPage":  {
-                        "sampleElement":  "button"
-                    }
+  "GenericPage": {
+    "sampleElement": "button"
+  },
+  "LoginPage": {
+    "usernameField": "input#user-name",
+    "passwordField": "input#password",
+    "loginButton": "input#login-button",
+    "errorMessage": "[data-test='error']"
+  },
+  "InventoryPage": {
+    "productList": ".inventory_list",
+    "sortDropdown": ".product_sort_container select",
+    "firstProductLink": ".inventory_item_name:first-of-type a",
+    "addToCartBackpack": "[data-test='add-to-cart-sauce-labs-backpack']",
+    "addToCartBikeLight": "[data-test='add-to-cart-sauce-labs-bike-light']",
+    "cartIcon": ".shopping_cart_link",
+    "hamburgerMenu": "#react-burger-menu-btn"
+  },
+  "CartPage": {
+    "removeBackpack": "[data-test='remove-sauce-labs-backpack']",
+    "continueShoppingButton": "[data-test='continue-shopping']",
+    "checkoutButton": "[data-test='checkout']"
+  },
+  "CheckoutInfoPage": {
+    "firstNameField": "[data-test='firstName']",
+    "lastNameField": "[data-test='lastName']",
+    "postalCodeField": "[data-test='postalCode']",
+    "continueButton": "[data-test='continue']",
+    "cancelButton": "[data-test='cancel']"
+  },
+  "CheckoutOverviewPage": {
+    "subtotalLabel": ".summary_subtotal_label",
+    "taxLabel": ".summary_tax_label",
+    "finishButton": "[data-test='finish']"
+  },
+  "NavMenu": {
+    "logoutLink": "#logout_sidebar_link"
+  },
+  "ProductDetailPage": {
+    "productName": ".inventory_details_name",
+    "productPrice": ".inventory_details_price",
+    "addToCartButton": "[data-test^='add-to-cart']",
+    "backButton": "[data-test='back-to-products']"
+  }
 }
+
